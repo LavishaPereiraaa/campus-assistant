@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Campus Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='3d.css') }}" />
+  </head>
+  <body>
+    <header class="hero">
+      <div class="container">
+        <div class="hero__badge">AI Campus Management</div>
+        <h1 class="hero__title">CampusAssistant</h1>
+        <p class="hero__subtitle">
+          One page to explore: Student services, Department services, and a demo assistant.
+        </p>
+
+        <div class="cta-row">
+          <a class="btn btn--primary" href="#student">Student</a>
+          <a class="btn btn--ghost" href="#department">Department</a>
+          <button class="btn btn--primary" id="openChat" type="button">Ask Assistant</button>
+        </div>
+
+        <div class="quick-cards" aria-label="Features">
+          <div class="qcard">
+            <div class="qcard__icon">🎓</div>
+            <div class="qcard__title">Student Panel</div>
+            <div class="qcard__text">Attendance, results, timetable (demo).</div>
+          </div>
+          <div class="qcard">
+            <div class="qcard__icon">🏛️</div>
+            <div class="qcard__title">Department Panel</div>
+            <div class="qcard__text">Analytics, backlogs, schedules (demo).</div>
+          </div>
+          <div class="qcard">
+            <div class="qcard__icon">🤖</div>
+            <div class="qcard__title">Interactive Chat</div>
+            <div class="qcard__text">Front-end widget — no backend required.</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="container main">
+      <section class="section" id="student">
+        <h2>Student services</h2>
+        <div class="grid">
+          <div class="card">✅ Attendance (demo)</div>
+          <div class="card">✅ Results & marks (demo)</div>
+          <div class="card">✅ Timetable (demo)</div>
+          <div class="card">✅ CGPA / SGPA (demo)</div>
+        </div>
+      </section>
+
+      <section class="section" id="department">
+        <h2>Department services</h2>
+        <div class="grid">
+          <div class="card">📊 Analytics (demo)</div>
+          <div class="card">📚 Subject performance (demo)</div>
+          <div class="card">🧾 Backlogs list (demo)</div>
+          <div class="card">🗓️ Today schedule (demo)</div>
+        </div>
+      </section>
+
+      <section class="section section--chat">
+        <h2>Try the assistant (demo)</h2>
+        <p class="muted">This is a lightweight interactive landing page assistant (front-end only).</p>
+
+        <div class="chat" id="chatWidget" hidden>
+          <div class="chat__head">
+            <div>
+              <div class="chat__title">Campus Assistant</div>
+              <div class="chat__hint">Type a question like “attendance”, “result”, “timetable”.</div>
+            </div>
+            <button class="icon-btn" id="closeChat" aria-label="Close">✕</button>
+          </div>
+
+          <div class="chat__body" id="chatBody" role="log" aria-live="polite"></div>
+
+          <form class="chat__foot" id="chatForm">
+            <input
+              type="text"
+              id="chatInput"
+              placeholder="Ask anything about campus services..."
+              autocomplete="off"
+            />
+            <button class="btn btn--primary" type="submit">Send</button>
+          </form>
+        </div>
+
+        <div class="empty-state" id="chatEmpty">
+          <button class="btn btn--primary" type="button" id="startChatInline">Start chatting</button>
+        </div>
+      </section>
+
+      <div class="fineprint">
+        <strong>Note:</strong> This minimalist project is only the landing page UI. Your full
+        campus app remains untouched in the original directory.
+      </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>
+

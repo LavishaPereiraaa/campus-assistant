@@ -1,0 +1,64 @@
+{
+    "entries": [
+        {
+            "Category": "Placements",
+            "Intent": "placement_process_query",
+            "Priority": 10,
+            "Keywords": ["placement process", "placement", "campus drive", "recruitment"],
+            "Synonyms": ["placement", "campus recruitment", "job placement", "hiring process"],
+            "Related Questions": ["How does placement work?", "Placement process?", "When do placements start?"],
+            "Alternative Phrases": ["placement kaise", "job kaise milegi"],
+            "Answer": "**Placement Process**\n\n• **Registration**: Starts in 7th semester\n• **Campus Drives**: 8th semester\n• **Process**: Registration → Pre-placement Talk → Written Test → Technical Interview → HR Interview → Offer\n\nCheck the placement portal for upcoming drives and eligibility."
+        },
+        {
+            "Category": "Placements",
+            "Intent": "placement_eligibility_query",
+            "Priority": 10,
+            "Keywords": ["placement eligibility", "eligible", "campus eligibility"],
+            "Synonyms": ["eligible for placement", "can sit for placement", "selection criteria"],
+            "Related Questions": ["Am I eligible?", "Eligibility criteria?", "Can I attend placements?"],
+            "Alternative Phrases": ["eligibile kya hu", "placement ke liye"],
+            "Answer": "**Placement Eligibility**\n\n• Minimum **60% aggregate** (overall CGPA)\n• **No active backlogs**\n• Clear all **fee dues**\n• Attend all **placement activities**\n• Maintain decent **behavior** during the process\n\nSome companies may have higher criteria."
+        },
+        {
+            "Category": "Placements",
+            "Intent": "placement_documents_query",
+            "Priority": 9,
+            "Keywords": ["placement documents", "resume", "documents needed"],
+            "Synonyms": ["resume", "placement papers", "required documents"],
+            "Related Questions": ["Documents needed?", "Resume format?", "What to carry?"],
+            "Alternative Phrases": ["documents", "resume format"],
+            "Answer": "**Required Documents**\n\n• Updated Resume (2-3 copies)\n• All semester marks cards (original + copy)\n• Passport size photographs (3-4)\n• ID proof (Aadhar/Pan)\n• Placement registration form\n\nKeep all documents ready before each drive."
+        },
+        {
+            "Category": "Placements",
+            "Intent": "placement_companies_query",
+            "Priority": 9,
+            "Keywords": ["companies", "recruiters", "visiting companies", "placement companies"],
+            "Synonyms": ["companies visiting", "top recruiters", "which companies", "hiring companies"],
+            "Related Questions": ["Which companies visit?", "Top recruiters?"],
+            "Alternative Phrases": ["kaun sa company aayega", "recruiters"],
+            "Answer": "**Top Recruiters** (typically visit our campus)\n\n• IT Services: TCS, Infosys, Wipro, Accenture, Cognizant\n• Product: Amazon, Google, Microsoft\n• Consulting: Deloitte, EY, PwC\n• Core: Bosch, Mercedes, Tata Steel\n\nPackages vary from 3-15 LPA depending on company and profile."
+        },
+        {
+            "Category": "Placements",
+            "Intent": "placement_package_query",
+            "Priority": 8,
+            "Keywords": ["package", "salary", "ctc", "lpa", "stipend"],
+            "Synonyms": ["salary", "ctc", "stipend", "offered salary"],
+            "Related Questions": ["What is the package?", "Salary offered?", "CTC?"],
+            "Alternative Phrases": ["kitni salary", "package kitna"],
+            "Answer": "**Average Packages by Department**\n\n• **Computer Science**: 4-8 LPA\n• **Electronics**: 3.5-6 LPA\n• **Mechanical**: 3-5 LPA\n• **Civil**: 3-4.5 LPA\n• **Electrical**: 3-5 LPA\n\nTop packages can go up to 15+ LPA for elite companies."
+        },
+        {
+            "Category": "Placements",
+            "Intent": "placement_statistics_query",
+            "Priority": 7,
+            "Keywords": ["placement statistics", "placement record", "placement percentage"],
+            "Synonyms": ["placement rate", "student placed", "placement record"],
+            "Related Questions": ["Placement statistics?", "How many placed?", "Success stories"],
+            "Alternative Phrases": ["kitne placed", "placement status"],
+            "Answer": "Our college has a strong placement record with 85%+ students placed annually. Average package: 4.5 LPA. Top recruiters across all departments visit regularly. Department faculty will share detailed statistics."
+        }
+    ]
+}

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student - My Results</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .result-header { text-align: center; margin-bottom: 2rem; padding: 1.5rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; color: white; }
+        .result-header h2 { margin: 0 0 0.5rem; font-size: 1.8rem; }
+        .result-header p { margin: 0; opacity: 0.9; }
+
+        .student-info-bar { display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; padding: 1rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 1.5rem; font-size: 0.95rem; }
+        .student-info-bar span { display: flex; align-items: center; gap: 0.5rem; }
+        .student-info-bar i { color: #667eea; }
+
+        .semester-tabs { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1.5rem; }
+        .semester-tab { padding: 0.7rem 1.5rem; border: 2px solid #667eea; border-radius: 25px; text-decoration: none; color: #667eea; font-weight: 600; transition: all 0.3s ease; }
+        .semester-tab:hover { background: #667eea; color: white; }
+        .semester-tab.active { background: #667eea; color: white; }
+
+        .result-summary { display: flex; gap: 1.5rem; justify-content: center; margin: 2rem 0; flex-wrap: wrap; }
+        .result-stat { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 1.5rem 2rem; border-radius: 16px; text-align: center; min-width: 150px; flex: 1; max-width: 200px; }
+        .result-stat h4 { margin: 0; font-size: 0.85rem; opacity: 0.9; text-transform: uppercase; letter-spacing: 0.5px; }
+        .result-stat p { margin: 0.8rem 0 0; font-size: 2rem; font-weight: bold; }
+        .result-stat.stat-pass { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); }
+        .result-stat.stat-fail { background: linear-gradient(135deg, #f44336 0%, #ff9800 100%); }
+
+        .grade-a-plus { color: #2ecc71; font-weight: bold; }
+        .grade-a { color: #27ae60; font-weight: bold; }
+        .grade-b-plus { color: #3498db; font-weight: bold; }
+        .grade-b { color: #2980b9; font-weight: bold; }
+        .grade-c { color: #f39c12; font-weight: bold; }
+        .grade-d { color: #e67e22; font-weight: bold; }
+        .grade-f { color: #e74c3c; font-weight: bold; }
+
+        .result-card { border: none; border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        .result-card h4 { margin: 0 0 1rem; color: #333; font-size: 1.2rem; display: flex; align-items: center; gap: 0.5rem; }
+        .result-card h4 i { color: #667eea; }
+
+        .no-results { text-align: center; padding: 4rem 2rem; background: #f9f9f9; border-radius: 16px; }
+        .no-results i { font-size: 4rem; color: #ddd; margin-bottom: 1rem; display: block; }
+        .no-results h3 { margin: 0 0 0.5rem; color: #666; }
+        .no-results p { margin: 0; color: #999; }
+
+        .grading-info { margin-top: 1.5rem; padding: 1.2rem; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 12px; }
+        .grading-info h4 { margin: 0 0 0.8rem; color: #333; font-size: 1rem; }
+        .grade-legend { display: flex; gap: 1.2rem; flex-wrap: wrap; font-size: 0.85rem; }
+        .grade-legend span { display: flex; align-items: center; gap: 0.3rem; }
+
+        .overall-card { border-left: 4px solid #667eea; }
+        .overall-card th { background: #667eea; color: white; }
+    </style>
+</head>
+<body>
+    {% include 'nav.html' %}
+
+    <div class="vv-container">
+        <div class="result-header">
+            <h2><i class="bi bi-mortarboard"></i> My Academic Results</h2>
+            <p>View your semester-wise marks and performance</p>
+        </div>
+
+        {% if student %}
+        <div class="student-info-bar">
+            <span><i class="bi bi-person-badge"></i> <strong>Student ID:</strong> {{ student[1] }}</span>
+            <span><i class="bi bi-person"></i> <strong>Name:</strong> {{ student[2] }}</span>
+            <span><i class="bi bi-building"></i> <strong>Department:</strong> {{ student[5] }}</span>
+        </div>
+        {% endif %}
+
+        <div class="semester-tabs">
+            {% for s in [1, 2, 3, 4] %}
+            <a href="/student-result?semester={{ s }}" class="semester-tab {% if semester|int == s %}active{% endif %}">
+                <i class="bi bi-journal-bookmark"></i> Semester {{ s }}
+            </a>
+            {% endfor %}
+        </div>
+
+        {% if semester %}
+        <div class="result-card">
+            <h4><i class="bi bi-journal-text"></i> Semester {{ semester }} Results</h4>
+
+            {% if results %}
+            <div class="result-summary">
+                <div class="result-stat">
+                    <h4>Total Marks</h4>
+                    <p>{{ total_marks }}</p>
+                </div>
+                <div class="result-stat stat-pass">
+                    <h4>Average</h4>
+                    <p>{{ average }}%</p>
+                </div>
+                <div class="result-stat">
+                    <h4>Attendance</h4>
+                    <p>{{ attendance_percent|default(0) }}%</p>
+                </div>
+                <div class="result-stat {% if status == 'PASS' %}stat-pass{% else %}stat-fail{% endif %}">
+                    <h4>Status</h4>
+                    <p style="font-size:1.5rem;">{{ status }}</p>
+                </div>
+            </div>
+
+            {% if status == 'FAIL' %}
+            <div style="background:#fff3cd; border:1px solid #ffc107; border-radius:8px; padding:1rem; margin-bottom:1rem; text-align:center;">
+                <strong style="color:#856404;">
+                    {% if attendance_percent is not none and attendance_percent < 70 %}
+                    <i class="bi bi-exclamation-triangle"></i> Attendance below 70% (Current: {{ attendance_percent }}%)
+                    {% endif %}
+                    {% for r in results %}
+                        {% if r[5] < 35 %}<i class="bi bi-exclamation-triangle"></i> {{ r[4] }} scored {{ r[5] }} (< 35){% endif %}
+                    {% endfor %}
+                </strong>
+            </div>
+            {% endif %}
+
+            <table class="table-vv">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Subject Code</th>
+                        <th>Subject Name</th>
+                        <th>Marks</th>
+                        <th>Max</th>
+                        <th>%</th>
+                        <th>Grade</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for result in results %}
+                    <tr style="{% if result[5] < 35 %}background:#ffe6e6{% endif %}">
+                        <td>{{ loop.index }}</td>
+                        <td>{{ result[7] if result[7] else '-' }}</td>
+                        <td>{{ result[4] }}</td>
+                        <td><strong style="{% if result[5] < 35 %}color:#f44336{% endif %}">{{ result[5] }}</strong> {% if result[5] < 35 %}<span style="color:#f44336; font-size:0.75rem;">FAIL</span>{% endif %}</td>
+                        <td>{{ result[6] }}</td>
+                        <td>{{ (result[5] * 100 / result[6])|round|int }}%</td>
+                        <td>
+                            {% set pct = (result[5] * 100 / result[6])|round|int %}
+                            {% if pct >= 90 %}<span class="grade-a-plus">A+</span>
+                            {% elif pct >= 80 %}<span class="grade-a">A</span>
+                            {% elif pct >= 70 %}<span class="grade-b-plus">B+</span>
+                            {% elif pct >= 60 %}<span class="grade-b">B</span>
+                            {% elif pct >= 50 %}<span class="grade-c">C</span>
+                            {% elif pct >= 35 %}<span class="grade-d">D</span>
+                            {% else %}<span class="grade-f">F</span>{% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="grading-info">
+                <h4><i class="bi bi-info-circle"></i> Grading Scale</h4>
+                <div class="grade-legend">
+                    <span><strong class="grade-a-plus">A+</strong> 90-100%</span>
+                    <span><strong class="grade-a">A</strong> 80-89%</span>
+                    <span><strong class="grade-b-plus">B+</strong> 70-79%</span>
+                    <span><strong class="grade-b">B</strong> 60-69%</span>
+                    <span><strong class="grade-c">C</strong> 50-59%</span>
+                    <span><strong class="grade-d">D</strong> 35-49%</span>
+                    <span><strong class="grade-f">F</strong> Below 35% (Fail)</span>
+                </div>
+            </div>
+
+            {% if student_subjects %}
+            <div class="result-card" style="margin-top:1.5rem;">
+                <h4><i class="bi bi-calendar-check"></i> Subject-wise Attendance - Semester {{ semester }}</h4>
+                <table class="table-vv">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Subject Code</th>
+                            <th>Subject Name</th>
+                            <th>Attendance %</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for subj in student_subjects %}
+                        <tr style="{% if subj.percent and subj.percent < 70 %}background:#ffe6e6{% endif %}">
+                            <td>{{ loop.index }}</td>
+                            <td>{{ subj.code }}</td>
+                            <td><strong>{{ subj.name }}</strong></td>
+                            <td>
+                                {% if subj.percent %}
+                                <span class="{% if subj.percent >= 75 %}grade-a-plus{% elif subj.percent >= 50 %}grade-c{% else %}grade-f{% endif %}">{{ subj.percent }}%</span>
+                                {% else %}
+                                <span style="color:#bbb;">-</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if subj.percent %}
+                                    {% if subj.percent >= 70 %}
+                                    <span class="grade-a-plus"><i class="bi bi-check-circle"></i> OK</span>
+                                    {% else %}
+                                    <span class="grade-f"><i class="bi bi-exclamation-triangle"></i> Low</span>
+                                    {% endif %}
+                                {% else %}
+                                <span style="color:#bbb;"><i class="bi bi-dash-circle"></i> No Record</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+            {% else %}
+            <div class="no-results">
+                <i class="bi bi-inbox"></i>
+                <h3>No Results Available</h3>
+                <p>No marks have been entered for Semester {{ semester }} yet.</p>
+                <p style="font-size:0.85rem; margin-top:0.5rem;">Please contact your department if you believe this is an error.</p>
+            </div>
+            {% endif %}
+        </div>
+
+        {% if all_semester_results %}
+        <div class="result-card overall-card">
+            <h4><i class="bi bi-bar-chart-line"></i> Overall Performance Summary</h4>
+            <table class="table-vv">
+                <thead>
+                    <tr>
+                        <th>Semester</th>
+                        <th>Total Marks</th>
+                        <th>Average %</th>
+                        <th>Result</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for sem_data in all_semester_results %}
+                    <tr>
+                        <td><strong>Semester {{ sem_data[0] }}</strong></td>
+                        <td>{{ sem_data[1] }}/{{ sem_data[2] }}</td>
+                        <td>{{ sem_data[3] }}%</td>
+                        <td>
+                            {% if sem_data[4] == 'PASS' %}
+                            <span class="grade-a"><i class="bi bi-check-circle"></i> PASS</span>
+                            {% else %}
+                            <span class="grade-f"><i class="bi bi-x-circle"></i> FAIL</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+
+        {% else %}
+        <div class="no-results">
+            <i class="bi bi-calendar-event"></i>
+            <h3>Select a Semester</h3>
+            <p>Choose a semester from the tabs above to view your results.</p>
+        </div>
+        {% endif %}
+
+        <div style="text-align:center; margin-top:2rem;">
+            <a href="/dashboard" class="btn-vv" style="background:#667eea; color:white; padding:0.8rem 2rem; border-radius:25px; text-decoration:none; display:inline-block;">
+                <i class="bi bi-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+    </div>
+
+    {% include 'footer.html' %}
+</body>
+</html>

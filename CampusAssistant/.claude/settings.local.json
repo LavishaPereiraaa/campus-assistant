@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c \"from app import app; app.run\\(debug=True\\)\")",
+      "Bash(./venv/Scripts/python.exe -c \"from app import app; print\\(''App loaded successfully''\\)\")",
+      "Bash(./venv/Scripts/flask.exe run)",
+      "Bash(./venv/Scripts/flask.exe run --host=0.0.0.0 --port=5000)",
+      "WebSearch",
+      "Bash(curl -s \"https://api.github.com/repos/givver/VVVeB/contents/\")",
+      "Bash(curl -s \"https://api.github.com/search/repositories?q=vvveb+bootstrap+editor\")",
+      "Bash(curl -s \"https://api.github.com/repos/givanz/VvvebJs/contents/\")",
+      "Bash(./venv/Scripts/flask.exe run --host=127.0.0.1 --port=5000)",
+      "Bash(curl -s \"http://127.0.0.1:5000/static/style.css\")",
+      "Bash(curl -s http://127.0.0.1:5000/)",
+      "Bash(taskkill //F //IM python.exe)",
+      "Bash(python database/create_db.py)",
+      "Bash(py database/create_db.py)",
+      "Bash(python -c \"from academic_chatbot import get_academic_response; print\\(''Import successful''\\)\")",
+      "Bash(python3 -c \"import academic_chatbot; print\\(''OK''\\)\")",
+      "Bash(python -c \"import academic_chatbot; print\\(''OK''\\)\")"
+    ]
+  }
+}

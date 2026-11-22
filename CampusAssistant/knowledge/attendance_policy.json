@@ -1,0 +1,44 @@
+{
+    "entries": [
+        {
+            "Category": "Attendance Policy",
+            "Intent": "attendance_policy_query",
+            "Priority": 10,
+            "Keywords": ["attendance policy", "minimum attendance", "75 percent", "attendance required"],
+            "Synonyms": ["attendance rule", "attendance criteria", "how much attendance", "attendance needed"],
+            "Related Questions": ["What is the attendance policy?", "How much attendance is required?", "Minimum attendance needed"],
+            "Alternative Phrases": ["kitna attendance chahiye", "attendance rule"],
+            "Answer": "**Attendance Policy**\n\n• Minimum **75% attendance** is mandatory for all students to be eligible to write semester examinations.\n• Attendance is calculated subject-wise for each theory and practical class.\n• Students with attendance below 75% may not be allowed to appear for exams.\n• Medical leave with valid medical certificate is accepted (submitted within 3 days).\n• Students with attendance below 60% will require a meeting with parents/guardians."
+        },
+        {
+            "Category": "Attendance Policy",
+            "Intent": "attendance_exemption_query",
+            "Priority": 8,
+            "Keywords": ["attendance exemption", "medical leave", "duty leave", "official duty"],
+            "Synonyms": ["exemption", "duty leave", "medical certificate", "official work"],
+            "Related Questions": ["Can I get attendance exemption?", "Medical leave rules", "Duty leave"],
+            "Alternative Phrases": ["leave kaise le", "duty leave"],
+            "Answer": "**Attendance Exemptions**\n\n• **Medical Leave**: Submit valid medical certificate within 3 days of returning. Medical emergencies require hospitalization documentation.\n• **Official Duty**: Participation in university events, sports, or NCC/NSS with prior approval from HOD.\n• **Department Permission**: Sponsored competitions, workshops with official letter.\n\nNote: All exemptions require proper documentation and prior approval where possible."
+        },
+        {
+            "Category": "Attendance Policy",
+            "Intent": "attendance_calculation_query",
+            "Priority": 7,
+            "Keywords": ["attendance calculation", "how attendance calculated", "attendance formula"],
+            "Synonyms": ["attendance count", "present days", "attendance formula"],
+            "Related Questions": ["How is attendance calculated?", "Attendance formula"],
+            "Alternative Phrases": ["attendance kaise count hota hai"],
+            "Answer": "**Attendance Calculation**\n\nFormula: `(Classes Attended / Total Classes Held) × 100`\n\n• Approximately **30 classes per week** across all subjects.\n• Working days: Monday to Saturday.\n• Lab sessions, tutorials, and quizzes count toward attendance.\n• Late arrival by more than 10 minutes may be marked as absent."
+        },
+        {
+            "Category": "Attendance Policy",
+            "Intent": "attendance_below75_query",
+            "Priority": 9,
+            "Keywords": ["attendance below 75", "low attendance", "less than 75 percent", "below threshold"],
+            "Synonyms": ["low attendance", "poor attendance", "attendance issue", "attendance problem"],
+            "Related Questions": ["What if attendance is below 75?", "Low attendance consequences", "Can't write exams"],
+            "Alternative Phrases": ["75 se kam attendance"],
+            "Answer": "**Consequences of Low Attendance (<75%)**\n\n• You will **not be eligible** to write semester examinations.\n• A **parental meeting** is mandatory if attendance drops below 60%.\n• You must submit a **medical certificate** if absences were due to illness.\n• Make-up classes may be arranged at the faculty's discretion.\n• Repeat appearance in the subject requires paying full fees again."
+        }
+    ]
+}

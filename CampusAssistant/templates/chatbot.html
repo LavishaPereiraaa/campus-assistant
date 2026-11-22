@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Campus Assistant</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { height: 100%; }
+        body { display: flex; flex-direction: column; }
+
+        .chat-wrapper { flex: 1; display: flex; flex-direction: column; max-width: 900px; width: 100%; margin: 0 auto; padding: 1rem; }
+
+        .chat-header { background: var(--gradient); color: white; padding: 1.2rem 1.5rem; border-radius: 15px 15px 0 0; display: flex; align-items: center; gap: 1rem; }
+        .chat-header i { font-size: 1.5rem; }
+        .chat-header h2 { font-weight: 600; font-size: 1.3rem; }
+        .header-back-btn { color: white; font-size: 1.2rem; margin-right: 0.5rem; transition: transform 0.2s; }
+        .header-back-btn:hover { transform: translateX(-3px); }
+
+        .chat-messages { flex: 1; background: white; border-left: 1px solid #e0e0e0; border-right: 1px solid #e0e0e0; padding: 1.5rem; overflow-y: auto; min-height: 400px; }
+
+        .message { display: flex; gap: 1rem; margin-bottom: 1.5rem; }
+        .message.user { flex-direction: row-reverse; }
+        .message-avatar { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+        .message.bot .message-avatar { background: var(--gradient); color: white; }
+        .message.user .message-avatar { background: #10a37f; color: white; }
+        .message-content { max-width: 75%; padding: 0.8rem 1rem; border-radius: 15px; line-height: 1.6; font-size: 0.95rem; }
+        .message.bot .message-content { background: #f7f7f8; color: #333; border-top-left-radius: 0; }
+        .message.user .message-content { background: var(--primary); color: white; border-top-right-radius: 0; }
+
+        .chat-input-area { background: white; border: 1px solid #e0e0e0; border-radius: 0 0 15px 15px; padding: 1rem; }
+        .chat-form { display: flex; gap: 0.8rem; }
+        .chat-form input { flex: 1; padding: 0.8rem 1.2rem; border: 2px solid #e0e0e0; border-radius: 25px; font-size: 1rem; outline: none; transition: border-color 0.3s; }
+        .chat-form input:focus { border-color: var(--primary); }
+        .chat-form button { padding: 0.8rem 1.5rem; background: var(--gradient); color: white; border: none; border-radius: 25px; font-size: 1rem; cursor: pointer; transition: transform 0.2s; }
+        .chat-form button:hover { transform: translateY(-2px); }
+
+        .back-link { position: fixed; bottom: 1rem; left: 1rem; }
+        .back-link a { color: var(--primary); text-decoration: none; font-weight: 500; }
+
+        @media (max-width: 768px) {
+            .chat-wrapper { padding: 0.5rem; }
+            .message-content { max-width: 85%; }
+            .chat-messages { min-height: 300px; }
+        }
+    </style>
+</head>
+<body>
+    {% include "nav.html" %}
+
+<div class="chat-wrapper">
+    <div class="chat-header">
+        <a href="/dashboard" class="header-back-btn"><i class="fa-solid fa-arrow-left"></i></a>
+        <i class="fa-solid fa-graduation-cap"></i>
+        <h2>Campus Assistant</h2>
+    </div>
+
+    <div class="chat-messages">
+        <div class="message bot">
+            <div class="message-avatar"><i class="fa-solid fa-robot"></i></div>
+            <div class="message-content">Hello! I am your Campus Assistant. Ask me anything about campus facilities, admissions, events, or any other campus-related questions!</div>
+        </div>
+        {% if session.get('last_question') %}
+        <div class="message user">
+            <div class="message-avatar"><i class="fa-solid fa-user"></i></div>
+            <div class="message-content">{{ session.get('last_question') }}</div>
+        </div>
+        <div class="message bot">
+            <div class="message-avatar"><i class="fa-solid fa-robot"></i></div>
+            <div class="message-content">{{ session.get('last_response') }}</div>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="chat-input-area">
+        <form id="chatForm" class="chat-form">
+            <input type="text" id="chatInput" name="message" placeholder="Type your message here..." required autocomplete="off">
+            <button type="submit"><i class="fa-solid fa-paper-plane"></i> Send</button>
+        </form>
+    </div>
+
+    <script>
+        const chatMessages = document.querySelector('.chat-messages');
+        const chatForm = document.getElementById('chatForm');
+        const chatInput = document.getElementById('chatInput');
+
+        function showTyping() {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message bot';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = '<div class="message-avatar"><i class="fa-solid fa-robot"></i></div><div class="message-content">Thinking...</div>';
+            chatMessages.appendChild(typingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function hideTyping() {
+            const el = document.getElementById('typingIndicator');
+            if (el) el.remove();
+        }
+
+        function addMessage(content, isUser) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'message ' + (isUser ? 'user' : 'bot');
+            msgDiv.innerHTML = isUser
+                ? '<div class="message-avatar"><i class="fa-solid fa-user"></i></div><div class="message-content">' + content + '</div>'
+                : '<div class="message-avatar"><i class="fa-solid fa-robot"></i></div><div class="message-content">' + content + '</div>';
+            chatMessages.appendChild(msgDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        chatForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const message = chatInput.value.trim();
+            if (!message) return;
+
+            addMessage(message, true);
+            chatInput.value = '';
+            showTyping();
+
+            // If you are logged in as department admin, use department pipeline; otherwise use general.
+            const endpoint = '{{ "/api/chat/department" if session.get("admin") else "/api/chat/general" }}';
+
+            try {
+                const res = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message })
+                });
+                const data = await res.json();
+                hideTyping();
+                addMessage(data.reply || 'Sorry, something went wrong. Please try again.', false);
+            } catch (err) {
+                hideTyping();
+                addMessage('Error connecting to server. Please try again.', false);
+            }
+        });
+    </script>
+
+
+
+<a href="/dashboard" class="btn-vv-outline" style="margin-top:1.5rem; text-align:center;">Back to Dashboard</a>
+</div>
+
+
+{% include "footer.html" %}
+</body>
+</html>

@@ -1,0 +1,94 @@
+:root{
+  --primary:#6c5ce7;
+  --accent:#00cec9;
+  --dark:#2d3436;
+  --light:#f6f7fb;
+  --muted:#6c757d;
+  --card:#ffffff;
+}
+
+/* 3D stage */
+.stage{
+  position:relative;
+  perspective:900px;
+  transform-style:preserve-3d;
+}
+
+/* background “depth” layers */
+.layer{
+  position:absolute;
+  inset:-40px;
+  transform-style:preserve-3d;
+  pointer-events:none;
+}
+
+.grid3d{
+  background:
+    radial-gradient(circle at 20% 20%, rgba(108,92,231,.35) 0 10%, transparent 35%),
+    radial-gradient(circle at 80% 40%, rgba(0,206,201,.25) 0 12%, transparent 38%),
+    radial-gradient(circle at 30% 80%, rgba(108,92,231,.22) 0 8%, transparent 40%);
+  opacity:.9;
+  filter:saturate(1.1);
+}
+
+.rings3d{
+  background:
+    repeating-radial-gradient(circle, rgba(255,255,255,.10) 0 2px, transparent 2px 14px);
+  mix-blend-mode:overlay;
+  opacity:.35;
+}
+
+.depth-card{
+  position:relative;
+  background:rgba(255,255,255,.78);
+  border:1px solid rgba(108,92,231,.16);
+  border-radius:26px;
+  box-shadow: 0 40px 100px rgba(108,92,231,.18);
+  transform-style:preserve-3d;
+}
+
+/* Floating tiles */
+.float-tiles{
+  position:absolute;
+  left:50%;
+  top:40px;
+  width: min(1000px, 92vw);
+  height: 420px;
+  transform: translateX(-50%);
+  pointer-events:none;
+}
+
+.tile{
+  position:absolute;
+  width:120px;
+  height:76px;
+  border-radius:18px;
+  background: linear-gradient(135deg, rgba(108,92,231,.16), rgba(0,206,201,.12));
+  border: 1px solid rgba(108,92,231,.22);
+  box-shadow: 0 18px 45px rgba(108,92,231,.12);
+  backdrop-filter: blur(8px);
+  transform-style:preserve-3d;
+  opacity:.95;
+  animation: floaty 6s ease-in-out infinite;
+}
+
+.tile::after{
+  content:"";
+  position:absolute;
+  inset:10px;
+  border-radius:14px;
+  border:1px dashed rgba(255,255,255,.45);
+  transform: translateZ(10px);
+  opacity:.6;
+}
+
+@keyframes floaty{
+  0%,100%{ transform: translateY(0px) translateZ(var(--z)) rotateX(0deg) rotateY(0deg);} 
+  50%{ transform: translateY(-14px) translateZ(calc(var(--z) + 30px)) rotateX(2deg) rotateY(-2deg);} 
+}
+
+/* Make things respond to mouse */
+.depth-hero{
+  transform: translateZ(30px);
+}
+

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Student Registration - Campus Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='landing.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div class="auth-wrapper">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        
+        <div class="auth-card" style="max-width: 550px;">
+            <h3>Register Account</h3>
+            
+            {% if success %}
+            <div class="auth-alert success">
+                <strong><i class="fa-solid fa-check-circle"></i> Registration Submitted!</strong><br>
+                Your request has been sent to the department for approval. Please wait for confirmation.
+            </div>
+            {% endif %}
+
+            {% if duplicate %}
+            <div class="auth-alert error">
+                <strong><i class="fa-solid fa-circle-exclamation"></i> Already registered.</strong><br>
+                This Student ID is already present (pending approval or already approved).
+            </div>
+            {% endif %}
+
+            <form method="POST" class="auth-form" enctype="multipart/form-data">
+                <input type="text" name="student_id" class="auth-input" placeholder="Student ID" required>
+                <input type="text" name="name" class="auth-input" placeholder="Full Name" required>
+                <input type="email" name="email" class="auth-input" placeholder="Email Address" required>
+                <input type="password" name="password" class="auth-input" placeholder="Password" required>
+                
+                <select name="gender" class="auth-select" required>
+                    <option value="" disabled selected>Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+                
+                <input type="hidden" name="department" value="Computer Science">
+                <div class="auth-input" style="color: var(--text-muted); cursor: not-allowed; text-align: left;">
+                    Department: Computer Science
+                </div>
+                
+                <input type="date" name="dob" class="auth-input" placeholder="Date of Birth" required style="color: var(--text-muted);">
+                
+                <div style="text-align: left; color: var(--text-muted); font-size: 0.9rem;">
+                    <label>Profile Image (Optional)</label>
+                    <input type="file" name="image" accept="image/*" class="auth-input" style="margin-top: 0.5rem; padding: 0.8rem;">
+                </div>
+                
+                <button type="submit" class="auth-btn btn-primary">Submit Registration</button>
+            </form>
+
+            <div class="auth-links">
+                <a href="/login">Already registered? Login here</a>
+                <a href="/"><i class="fa-solid fa-arrow-left"></i> Back to Home</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

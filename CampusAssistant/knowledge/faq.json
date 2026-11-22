@@ -1,0 +1,93 @@
+{
+    "entries": [
+        {
+            "Category": "General FAQ",
+            "Intent": "password_query",
+            "Priority": 10,
+            "Keywords": ["password", "reset", "change", "forgot"],
+            "Synonyms": ["forgot password", "change password", "reset password", "new password"],
+            "Related Questions": ["How to reset my password?", "I forgot my password", "How to change password"],
+            "Alternative Phrases": ["can't login", "password not working", "need new password"],
+            "Answer": "To reset your password, visit the admin office in person with a valid ID card. Alternatively, contact your department administrator for password reset assistance. Online password reset is available through the student portal under Account Settings."
+        },
+        {
+            "Category": "General FAQ",
+            "Intent": "id_card_query",
+            "Priority": 9,
+            "Keywords": ["id card", "identity card", "id card issue", "new id"],
+            "Synonyms": ["identity card", "college id", "student id", "id card duplicate"],
+            "Related Questions": ["How to get ID card?", "New ID card issue", "Lost ID card"],
+            "Alternative Phrases": ["where to get id", "id card kaha se milega"],
+            "Answer": "ID cards are issued at the beginning of each semester from the Admin Office. If you've lost your ID card, apply for a duplicate at the admin office with a written application and a copy of your FIR (if lost outside)."
+        },
+        {
+            "Category": "General FAQ",
+            "Intent": "bonafide_query",
+            "Priority": 9,
+            "Keywords": ["bonafide", "certificate", "bonafide certificate"],
+            "Synonyms": ["bonafide certificate", "residence certificate", "character certificate"],
+            "Related Questions": ["How to apply for bonafide certificate?", "Need bonafide"],
+            "Alternative Phrases": ["bonafide chahiye", "certificate kaise le"],
+            "Answer": "Apply for a bonafide certificate through the student portal (Available Downloads section) or visit the admin office. Processing takes 1-2 working days. A fee of Rs. 100 applies."
+        },
+        {
+            "Category": "General FAQ",
+            "Intent": "subject_change_query",
+            "Priority": 8,
+            "Keywords": ["subject change", "add drop", "change subject", "swap subject"],
+            "Synonyms": ["change subject", "add subject", "drop subject", "subject swap"],
+            "Related Questions": ["How to change subjects?", "When can I change subjects?"],
+            "Alternative Phrases": ["subject badalne ka"],
+            "Answer": "Subject change is allowed only during the first week of each semester. You need approval from your HOD and the subject faculty. Fill the Subject Change Form available at the admin office or download from the portal."
+        },
+        {
+            "Category": "General FAQ",
+            "Intent": "revaluation_query",
+            "Priority": 8,
+            "Keywords": ["revaluation", "recheck", "revaluation form", "photo copy"],
+            "Synonyms": ["recheck", "retotaling", "revaluation result", "answer script"],
+            "Related Questions": ["How to apply for exam revaluation?", "Want revaluation"],
+            "Alternative Phrases": ["answer copy dekhna"],
+            "Answer": "Apply for revaluation within 7 days of result declaration at the Examination Cell with the revaluation form (available at exam cell). A fee of Rs. 500 per subject applies. Results are declared within 2 weeks."
+        },
+        {
+            "Category": "General FAQ",
+            "Intent": "grievance_query",
+            "Priority": 7,
+            "Keywords": ["grievance", "complaint", "feedback", "suggestion"],
+            "Synonyms": ["complaint", "feedback", "suggestion", "raise issue"],
+            "Related Questions": ["Where to submit grievance?", "How to give feedback?"],
+            "Alternative Phrases": ["problem kaha batayein"],
+            "Answer": "Submit your grievance online through the student portal (Grievance section) or meet your class counselor face-to-face. For serious issues, meet the HOD or the Grievance Committee. Response is provided within 5 working days."
+        },
+        {
+            "Category": "General FAQ",
+            "Intent": "migration_query",
+            "Priority": 7,
+            "Keywords": ["migration", "migration certificate", "transfer certificate"],
+            "Synonyms": ["tc", "transfer certificate", "college transfer"],
+            "Related Questions": ["How to get migration certificate?", "Need migration"],
+            "Alternative Phrases": ["migration letter chahiye"],
+            "Answer": "Apply for migration certificate at the admin office after completing your degree and clearing all dues. Processing takes 3-5 working days. Submit your leaving certificate from the new institution."
+        },
+        {
+            "Category": "General FAQ",
+            "Intent": "transcript_query",
+            "Priority": 7,
+            "Keywords": ["transcript", "marksheet", "academic transcript"],
+            "Synonyms": ["transcript", "academic record", "detailed marksheet"],
+            "Related Questions": ["How to get transcript?", "Need official transcript"],
+            "Alternative Phrases": [" transcript kaise le"],
+            "Answer": "Request transcript at the admin office. It includes your complete academic record. Processing takes 2-3 working days. Fees: Rs. 500 for first copy, Rs. 200 for additional copies."
+        },
+        {
+            "Category": "General FAQ",
+            "Intent": "general_faq",
+            "Priority": 5,
+            "Keywords": ["help", "faq", "questions", "general"],
+            "Synonyms": ["doubt", "query", "information"],
+            "Related Questions": ["What can I ask you?", "Help me"],
+            "Answer": "I can help you with questions about attendance, marks, results, timetables, examinations, placements, scholarships, hostel, fees, and general college information. Just ask naturally!"
+        }
+    ]
+}

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Assistant | Smart AI Management</title>
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Custom Landing CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='landing.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+    <nav class="landing-nav">
+        <a href="/" class="brand">CampusAssistant<span style="color: var(--accent-color);">.</span></a>
+        <!-- Optional: Add simple links here if needed -->
+    </nav>
+
+    <div class="hero">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        
+        <div class="hero-content">
+            <h1>The Next Generation of <br><span>Campus Management</span></h1>
+            <p>Experience a seamless, AI-driven platform for attendance, results, placements, and all your academic needs. Choose your portal below to get started.</p>
+            
+            <div class="portals">
+                <!-- Student Portal -->
+                <div class="portal-card student">
+                    <i class="bi bi-mortarboard-fill portal-icon"></i>
+                    <h3>Student Portal</h3>
+                    <p>Access your dashboard, track attendance, view results, and chat with the AI assistant.</p>
+                    <a href="/login" class="btn-custom btn-primary">Student Login</a>
+                    <div class="secondary-links">
+                        <span>New here?</span> <a href="/register">Create an account</a>
+                    </div>
+                </div>
+
+                <!-- Department Portal -->
+                <div class="portal-card dept">
+                    <i class="bi bi-building-fill-gear portal-icon"></i>
+                    <h3>Department Portal</h3>
+                    <p>Manage student records, update attendance, schedule exams, and oversee placements.</p>
+                    <a href="/department-login" class="btn-custom btn-accent">Department Login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

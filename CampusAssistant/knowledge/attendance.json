@@ -1,0 +1,26 @@
+{
+    "minimum_attendance_required": 75,
+    "attendance_rules": [
+        "Minimum 75% attendance is mandatory for all students",
+        "Students with less than 75% may not be allowed to write exams",
+        "Medical leave requires valid medical certificate",
+        "Attendance is calculated subject-wise",
+        "Late attendance below 60% requires parental meeting"
+    ],
+    "attendance_calculation": {
+        "formula": "(Classes Attended / Total Classes) * 100",
+        "classes_per_week": 30,
+        "working_days": "Monday to Saturday"
+    },
+    "attendance_exemptions": {
+        "official_duty": "Approved by HOD",
+        "medical_emergency": "With valid medical certificate within 3 days",
+        "university_event": "Participation in university events"
+    },
+    "query_patterns": {
+        "attendance_percentage": "Show my attendance percentage",
+        "attendance_status": "Check attendance status",
+        "attendance_required": "How much attendance is required",
+        "low_attendance": "What if attendance is low"
+    }
+}

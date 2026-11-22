@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Department Login - Campus Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='landing.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div class="auth-wrapper">
+        <div class="orb orb-1" style="background: var(--accent-color);"></div>
+        <div class="orb orb-2" style="background: #f43f5e;"></div>
+        
+        <div class="auth-card dept">
+            <h3>Department Portal</h3>
+            
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                  {% for category, message in messages %}
+                    <div class="auth-alert error">
+                      <i class="fa-solid fa-circle-exclamation"></i> {{ message }}
+                    </div>
+                  {% endfor %}
+              {% endif %}
+            {% endwith %}
+
+            <form method="POST" class="auth-form">
+                <input type="text" name="username" class="auth-input" placeholder="Admin Username" required>
+                <input type="password" name="password" class="auth-input" placeholder="Password" required>
+                <button type="submit" class="auth-btn btn-accent">Login as Admin</button>
+            </form>
+
+            <div class="auth-links">
+                <a href="/"><i class="fa-solid fa-arrow-left"></i> Back to Home</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

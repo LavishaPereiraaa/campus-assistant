@@ -1,0 +1,74 @@
+{
+    "entries": [
+        {
+            "Category": "Academics",
+            "Intent": "academic_system_query",
+            "Priority": 10,
+            "Keywords": ["academic system", "degree", "course", "duration", "be", "b.tech"],
+            "Synonyms": ["be degree", "btech", "engineering degree", "course duration"],
+            "Related Questions": ["What is the degree?", "How long is the course?", "BE duration"],
+            "Alternative Phrases": ["degree kitni", "course kitne saal"],
+            "Answer": "**Academic System**\n\n• **Degree**: Bachelor of Engineering (BE)\n• **Duration**: 4 years (8 semesters)\n• **Credits**: Minimum 160 credits\n• **CGPA Scale**: 10.0\n• **Evaluation**: Continuous assessment with internal tests, assignments, quizzes, and end-semester exams."
+        },
+        {
+            "Category": "Academics",
+            "Intent": "grading_system_query",
+            "Priority": 10,
+            "Keywords": ["grading", "grades", "grade system", "grading scale", "marks"],
+            "Synonyms": ["grade", "marks system", "grading pattern", "how graded"],
+            "Related Questions": ["How is grading done?", "What is the grading system?", "Grade scale"],
+            "Alternative Phrases": ["grade kaise", "marks kitne"],
+            "Answer": "**Grading System**\n\n| Grade | Marks Range | Description |\n|-------|-------------|-------------|\n| O | 90-100 | Outstanding |\n| S | 80-89 | Excellent |\n| A | 70-79 | Very Good |\n| B | 60-69 | Good |\n| C | 50-59 | Average |\n| D | 40-49 | Pass |\n| F | Below 40 | Fail |\n\nMinimum 40% (D grade) is required to pass each subject."
+        },
+        {
+            "Category": "Academics",
+            "Intent": "academic_rules_query",
+            "Priority": 9,
+            "Keywords": ["academic rules", "passing marks", "minimum marks", "backlog rules"],
+            "Synonyms": ["pass criteria", "backlog limit", "passing criteria", "passing rules"],
+            "Related Questions": ["What are the academic rules?", "Passing criteria?", "Backlog rules"],
+            "Alternative Phrases": ["pass kaise", "backlog kitna"],
+            "Answer": "**Academic Rules**\n\n• **Passing**: Minimum 40% marks in each subject\n• **CGPA**: Minimum 5.0 CGPA required for degree\n• **Backlogs**: No more than 2 backlogs per semester allowed\n• **Attendance**: Minimum 75% mandatory for exam eligibility\n• **Grace**: Limited grace marks may be provided at exam committee discretion."
+        },
+        {
+            "Category": "Academics",
+            "Intent": "evaluation_query",
+            "Priority": 8,
+            "Keywords": ["evaluation", "internal marks", "assessment", "exam pattern"],
+            "Synonyms": ["how evaluated", "marking scheme", "assessment pattern", "internal test"],
+            "Related Questions": ["How am I evaluated?", "Internal marks?", "Exam pattern"],
+            "Alternative Phrases": ["assessment kaise", "marks kaise milte hain"],
+            "Answer": "**Evaluation Pattern**\n\n| Component | Weightage |\n|-----------|----------|\n| Internal Test 1 | 10% |\n| Internal Test 2 | 10% |\n| Assignments | 5% |\n| Quiz | 5% |\n| End Semester | 70% |\n\n2 Internal Tests, 3 Assignments, 1 Quiz per semester."
+        },
+        {
+            "Category": "Academics",
+            "Intent": "cgpa_query",
+            "Priority": 10,
+            "Keywords": ["cgpa", "cumulative", "overall grade", "total grade", "aggregate"],
+            "Synonyms": ["cumulative gpa", "overall cgpa", "total grade point"],
+            "Related Questions": ["What is my CGPA?", "Show my CGPA", "Overall grade"],
+            "Alternative Phrases": ["total cgpa", "overall grade"],
+            "Answer": "Your CGPA is calculated as the weighted average of all semester GPAs multiplied by credits. Minimum 5.0 CGPA is required to pass. Ask me 'What is my CGPA?' to see your current CGPA from the database."
+        },
+        {
+            "Category": "Academics",
+            "Intent": "sgpa_query",
+            "Priority": 9,
+            "Keywords": ["sgpa", "semester grade", "semester result"],
+            "Synonyms": ["semester gpa", "semester performance", "sem grade"],
+            "Related Questions": ["What is my SGPA?", "Show semester result", "Current semester marks"],
+            "Alternative Phrases": ["semester grade", "sem result"],
+            "Answer": "Your SGPA (Semester Grade Point Average) is the weighted average of your grades in a semester. Ask me 'Show my semester result' to see your SGPA for each semester."
+        },
+        {
+            "Category": "Academics",
+            "Intent": "backlog_query",
+            "Priority": 9,
+            "Keywords": ["backlog", "backlogs", "failed subjects", "supplementary"],
+            "Synonyms": ["failed", "supplementary exam", "carry over", "kt"],
+            "Related Questions": ["How many backlogs?", "Failed subjects?", "Backlog count"],
+            "Alternative Phrases": ["failed subjects", "backlog kitna"],
+            "Answer": "You can have a maximum of 2 backlogs per semester. Backlogs must be cleared in subsequent attempts. Ask me 'How many backlogs do I have?' to see yours."
+        }
+    ]
+}

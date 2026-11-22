@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin - Edit Placement</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    {% include 'admin_module_nav.html' %}
+
+    <div class="main-content">
+        <div class="vv-card" style="max-width:700px;">
+            <div class="vv-card-header">
+                <h3>Edit Placement</h3>
+            </div>
+
+            <form method="POST" action="/department-placement/update/{{ record[0] }}" class="form-vv">
+                <input type="text" name="department" placeholder="Department" required value="{{ record[1] }}">
+                <input type="text" name="company" placeholder="Company" required value="{{ record[2] }}">
+                <input type="text" name="package" placeholder="Package" required value="{{ record[3] }}">
+                <button type="submit" class="btn-vv">Update</button>
+            </form>
+
+            <a href="/department-placement" class="btn-vv-outline" style="display:inline-block; margin-top:1rem;">Back</a>
+        </div>
+    </div>
+</body>
+</html>
+

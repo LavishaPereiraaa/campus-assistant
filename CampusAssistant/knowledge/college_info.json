@@ -1,0 +1,54 @@
+{
+    "entries": [
+        {
+            "Category": "College Information",
+            "Intent": "college_info_query",
+            "Priority": 10,
+            "Keywords": ["college", "about college", "information", " institute", "about institute"],
+            "Synonyms": ["about college", "college details", "college profile", "institute info"],
+            "Related Questions": ["Tell me about the college", "What is this college?", "College details"],
+            "Alternative Phrases": ["college ke baare mein", "institute info"],
+            "Answer": "**Apex Institute of Technology**\n\n• Established: 2005\n• Location: Bangalore, Karnataka\n• Affiliation: Visvesvaraya Technological University (VTU)\n• Approval: AICTE Approved\n• Vision: To produce competent engineers with ethical values and technical excellence.\n• Mission: To provide quality education, promote research, and foster innovation."
+        },
+        {
+            "Category": "College Information",
+            "Intent": "timings_query",
+            "Priority": 10,
+            "Keywords": ["timings", "working hours", "college timing", "office hours", "open time"],
+            "Synonyms": ["college open", "when open", "college timing", "office time"],
+            "Related Questions": ["What are the college timings?", "When does college open?", "Office hours"],
+            "Alternative Phrases": ["college kab khulta hai", "office timing"],
+            "Answer": "**College Timings**\n\n• **Office**: 9:00 AM to 5:00 PM (Monday to Friday)\n• **Library**: 8:00 AM to 6:00 PM\n• **Canteen**: 7:00 AM to 7:00 PM\n• **Labs**: 9:00 AM to 5:00 PM\n\nNote: During exams, extended hours may apply. Check the academic calendar."
+        },
+        {
+            "Category": "College Information",
+            "Intent": "contact_query",
+            "Priority": 9,
+            "Keywords": ["contact", "phone", "email", "address", "contact details"],
+            "Synonyms": ["contact number", "email id", "reach college", "contact info"],
+            "Related Questions": ["How to contact the college?", "Phone number?", "Email address"],
+            "Alternative Phrases": ["contact number", "email kya hai"],
+            "Answer": "**Contact Details**\n\n• **Email**: info@apex.edu\n• **Phone**: +91-80-12345678\n• **Website**: www.apex.edu\n• **Address**: Apex Institute of Technology, Bangalore, Karnataka\n\nFor department-specific queries, contact your HOD directly."
+        },
+        {
+            "Category": "College Information",
+            "Intent": "holidays_query",
+            "Priority": 8,
+            "Keywords": ["holidays", "vacation", "college holidays", "closed days"],
+            "Synonyms": ["vacation", "break", "when closed", "holiday list"],
+            "Related Questions": ["What are the holidays?", "When is vacation?", "College closed"],
+            "Alternative Phrases": ["kabb hai", "vacation kab"],
+            "Answer": "**College Holidays**\n\n• **Weekly Off**: Sunday\n• **Public Holidays**: As per government notification\n• **Mid-term Break**: Typically during Dasara/Diwali (check academic calendar)\n• **Summer Vacation**: May-June after semester exams\n\nHoliday list is published at the beginning of each semester."
+        },
+        {
+            "Category": "College Information",
+            "Intent": "calendar_query",
+            "Priority": 7,
+            "Keywords": ["academic calendar", "semester dates", "exam dates", "schedule"],
+            "Synonyms": ["calendar", "semester schedule", "important dates", "academic schedule"],
+            "Related Questions": ["Academic calendar?", "When do semester start?", "Exam schedule"],
+            "Alternative Phrases": ["semester kab shuru", "exam kab"],
+            "Answer": "**Academic Calendar**\n\n• **Odd Semester**: August to December\n  - Classes start: August first week\n  - Internal tests: September\n  - Semester exams: December\n  - Results: January\n\n• **Even Semester**: January to May\n  - Classes start: January second week\n  - Internal tests: March\n  - Semester exams: May\n  - Results: June\n\nExact dates are announced at semester start."
+        }
+    ]
+}

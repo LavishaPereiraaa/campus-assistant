@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student - Timetable</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .page-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 1.5rem 2rem; border-radius: 12px; margin-bottom: 1.5rem; }
+        .page-header h2 { margin: 0 0 0.3rem; }
+        .page-header p { margin: 0; opacity: 0.9; }
+
+        .student-info-bar { display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; padding: 1rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 1.5rem; font-size: 0.95rem; }
+        .student-info-bar span { display: flex; align-items: center; gap: 0.5rem; }
+        .student-info-bar i { color: #667eea; }
+
+        .semester-tabs { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1.5rem; }
+        .semester-tab { padding: 0.7rem 1.5rem; border: 2px solid #667eea; border-radius: 25px; text-decoration: none; color: #667eea; font-weight: 600; transition: all 0.3s ease; }
+        .semester-tab:hover { background: #667eea; color: white; }
+        .semester-tab.active { background: #667eea; color: white; }
+
+        .timetable-card { border: none; border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        .timetable-card h4 { margin: 0 0 1rem; color: #333; font-size: 1.2rem; display: flex; align-items: center; gap: 0.5rem; }
+        .timetable-card h4 i { color: #667eea; }
+
+        .timetable-table { width: 100%; border-collapse: separate; border-spacing: 0; }
+        .timetable-table th { background: #667eea; color: white; padding: 1rem; text-align: left; font-weight: 600; }
+        .timetable-table th:first-child { border-radius: 12px 0 0 0; }
+        .timetable-table th:last-child { border-radius: 0 12px 0 0; }
+        .timetable-table td { padding: 1rem; border-bottom: 1px solid #eee; }
+        .timetable-table tr:last-child td { border-bottom: none; }
+        .timetable-table tr:hover td { background: #f9f9f9; }
+        .timetable-table .day-cell { font-weight: 600; color: #667eea; min-width: 100px; }
+
+        .no-results { text-align: center; padding: 4rem 2rem; background: #f9f9f9; border-radius: 16px; }
+        .no-results i { font-size: 4rem; color: #ddd; margin-bottom: 1rem; display: block; }
+        .no-results h3 { margin: 0 0 0.5rem; color: #666; }
+        .no-results p { margin: 0; color: #999; }
+
+        .subjects-list { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1rem; }
+        .subject-badge { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.85rem; }
+    </style>
+</head>
+<body>
+    {% include 'nav.html' %}
+
+    <div class="main-content">
+        <div class="vv-card" style="max-width:900px;">
+            <div class="page-header">
+                <h2><i class="bi bi-table"></i> Class Timetable</h2>
+                <p>View your semester-wise class schedule</p>
+            </div>
+
+            {% if user %}
+            <div class="student-info-bar">
+                <span><i class="bi bi-person-badge"></i> <strong>Welcome,</strong> {{ user }}</span>
+                <span><i class="bi bi-building"></i> <strong>Department:</strong> {{ department }}</span>
+            </div>
+            {% endif %}
+
+            <div class="semester-tabs">
+                {% for s in [1, 2, 3, 4] %}
+                <a href="/timetable?semester={{ s }}" class="semester-tab {% if semester|int == s %}active{% endif %}">
+                    <i class="bi bi-journal-bookmark"></i> Semester {{ s }}
+                </a>
+                {% endfor %}
+            </div>
+
+            {% if semester %}
+            <div class="timetable-card">
+                <h4><i class="bi bi-calendar-week"></i> Semester {{ semester }} Timetable</h4>
+
+                {% if records %}
+                <table class="timetable-table">
+                    <thead>
+                        <tr>
+                            <th><i class="bi bi-calendar-day"></i> Day</th>
+                            <th><i class="bi bi-book"></i> Subject</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for day, subject in records %}
+                        <tr>
+                            <td class="day-cell">{{ day }}</td>
+                            <td>{{ subject }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <div class="no-results">
+                    <i class="bi bi-inbox"></i>
+                    <h3>No Timetable Available</h3>
+                    <p>No timetable has been added for Semester {{ semester }} yet.</p>
+                </div>
+                {% endif %}
+            </div>
+
+            {% if subjects %}
+            <div class="timetable-card">
+                <h4><i class="bi bi-book"></i> Subjects This Semester</h4>
+                <div class="subjects-list">
+                    {% for subj in subjects %}
+                    <span class="subject-badge">{{ subj[1] }} - {{ subj[0] }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            {% else %}
+            <div class="no-results">
+                <i class="bi bi-calendar-event"></i>
+                <h3>Select a Semester</h3>
+                <p>Choose a semester from the tabs above to view your timetable.</p>
+            </div>
+            {% endif %}
+
+            <div style="text-align:center; margin-top:2rem;">
+                <a href="/dashboard" class="btn-vv-outline" style="padding:0.8rem 2rem; border-radius:25px; text-decoration:none; display:inline-block;">
+                    <i class="bi bi-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+
+    {% include 'footer.html' %}
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student - Attendance</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .page-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 1.5rem 2rem; border-radius: 12px; margin-bottom: 1.5rem; }
+        .page-header h2 { margin: 0 0 0.3rem; }
+        .page-header p { margin: 0; opacity: 0.9; }
+
+        .student-info-bar { display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; padding: 1rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 1.5rem; font-size: 0.95rem; }
+        .student-info-bar span { display: flex; align-items: center; gap: 0.5rem; }
+        .student-info-bar i { color: #667eea; }
+
+        .semester-tabs { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1.5rem; }
+        .semester-tab { padding: 0.7rem 1.5rem; border: 2px solid #667eea; border-radius: 25px; text-decoration: none; color: #667eea; font-weight: 600; transition: all 0.3s ease; }
+        .semester-tab:hover { background: #667eea; color: white; }
+        .semester-tab.active { background: #667eea; color: white; }
+
+        .attendance-card { border: none; border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        .attendance-card h4 { margin: 0 0 1rem; color: #333; font-size: 1.2rem; display: flex; align-items: center; gap: 0.5rem; }
+        .attendance-card h4 i { color: #667eea; }
+
+        .subject-list { border: 1px solid #eee; border-radius: 12px; overflow: hidden; }
+        .subject-item { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.2rem; border-bottom: 1px solid #eee; transition: background 0.2s; }
+        .subject-item:last-child { border-bottom: none; }
+        .subject-item:hover { background: #f9f9f9; }
+        .subject-item .subject-code { font-weight: 700; color: #667eea; margin-right: 0.5rem; }
+        .subject-item .subject-name { color: #333; flex: 1; }
+
+        .attendance-bar-container { background: #e9ecef; border-radius: 8px; height: 8px; overflow: hidden; margin-top: 0.3rem; }
+        .attendance-bar { height: 100%; border-radius: 8px; transition: width 0.3s ease; }
+        .attendance-bar.high { background: linear-gradient(90deg, #11998e, #38ef7d); }
+        .attendance-bar.medium { background: linear-gradient(90deg, #f39c12, #f1c40f); }
+        .attendance-bar.low { background: linear-gradient(90deg, #e74c3c, #c0392b); }
+
+        .no-results { text-align: center; padding: 4rem 2rem; background: #f9f9f9; border-radius: 16px; }
+        .no-results i { font-size: 4rem; color: #ddd; margin-bottom: 1rem; display: block; }
+        .no-results h3 { margin: 0 0 0.5rem; color: #666; }
+        .no-results p { margin: 0; color: #999; }
+
+        .summary-stats { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1.5rem; }
+        .stat-card { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 1.5rem 2rem; border-radius: 16px; text-align: center; min-width: 150px; }
+        .stat-card h4 { margin: 0; font-size: 0.85rem; opacity: 0.9; }
+        .stat-card p { margin: 0.5rem 0 0; font-size: 2rem; font-weight: bold; }
+        .stat-card.stat-good { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); }
+        .stat-card.stat-warning { background: linear-gradient(135deg, #f39c12 0%, #f1c40f 100%); }
+        .stat-card.stat-danger { background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); }
+    </style>
+</head>
+<body>
+    {% include 'nav.html' %}
+
+    <div class="main-content">
+        <div class="vv-card" style="max-width:900px;">
+            <div class="page-header">
+                <h2><i class="bi bi-calendar-check"></i> My Attendance</h2>
+                <p>View your semester-wise attendance record</p>
+            </div>
+
+            {% if user %}
+            <div class="student-info-bar">
+                <span><i class="bi bi-person-badge"></i> <strong>Welcome,</strong> {{ user }}</span>
+                <span><i class="bi bi-building"></i> <strong>Department:</strong> {{ department }}</span>
+            </div>
+            {% endif %}
+
+            <div class="semester-tabs">
+                {% for s in [1, 2, 3, 4] %}
+                <a href="/attendance?semester={{ s }}" class="semester-tab {% if semester|int == s %}active{% endif %}">
+                    <i class="bi bi-journal-bookmark"></i> Semester {{ s }}
+                </a>
+                {% endfor %}
+            </div>
+
+            {% if semester %}
+            <!-- All Semesters Overview -->
+            <div class="attendance-card">
+                <h4><i class="bi bi-grid-3x3"></i> All Semesters Attendance Overview</h4>
+                <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(180px, 1fr)); gap:1rem; margin-bottom:1rem;">
+                    {% for s in [1, 2, 3, 4] %}
+                    {% set sem_data = all_semesters_data.get(s, {}) %}
+                    {% set sem_subjects = sem_data.subjects if sem_data else [] %}
+                    {% set sem_att_data = sem_data.attendance_data if sem_data else {} %}
+                    {% set sem_avg = sem_data.avg if sem_data else 0 %}
+                    {% set sem_status = sem_data.status if sem_data else "-" %}
+                    <div style="background:{% if sem_avg >= 70 %}linear-gradient(135deg, #11998e, #38ef7d){% elif sem_avg > 0 %}linear-gradient(135deg, #f39c12, #f1c40f){% else %}#f8f9fa{% endif %}; {% if sem_avg > 0 %}color:white;{% endif %} border-radius:12px; padding:1.2rem; text-align:center;">
+                        <div style="font-size:0.9rem; font-weight:600; {% if sem_avg == 0 %}color:#888{% endif %}">Semester {{ s }}</div>
+                        <div style="font-size:1.8rem; font-weight:bold; margin:0.5rem 0;">{{ sem_avg }}%</div>
+                        <div style="font-size:0.8rem; {% if sem_avg >= 70 %}opacity:0.9{% elif sem_avg > 0 %}opacity:0.9{% endif %}">
+                            {% if sem_status == "PASS" %}<i class="bi bi-check-circle"></i> PASS{% elif sem_status == "FAIL" %}<i class="bi bi-x-circle"></i> FAIL{% else %}-{% endif %}
+                        </div>
+                        <div style="font-size:0.75rem; margin-top:0.3rem; {% if sem_avg >= 70 %}opacity:0.8{% elif sem_avg > 0 %}opacity:0.8{% else %}color:#aaa{% endif %}">
+                            {{ sem_att_data|length }}/{{ sem_subjects|length }} subjects
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="attendance-card">
+                <h4><i class="bi bi-book"></i> Subjects in Semester {{ semester }}</h4>
+
+                {% if subjects %}
+                <div class="subject-list">
+                    {% for subj in subjects %}
+                    {% set att = attendance_data.get(subj[1].strip()) %}
+                    <div class="subject-item">
+                        <div>
+                            <span class="subject-code">{{ subj[2] }}</span>
+                            <span class="subject-name">{{ subj[1] }}</span>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:1rem;">
+                            {% if att %}
+                            <div style="flex:1; max-width:150px;">
+                                <div style="display:flex; justify-content:space-between; font-size:0.85rem; margin-bottom:0.3rem;">
+                                    <span>{{ att.percent }}%</span>
+                                </div>
+                                <div class="attendance-bar-container">
+                                    <div class="attendance-bar {% if att.percent >= 75 %}high{% elif att.percent >= 50 %}medium{% else %}low{% endif %}" style="width: {{ att.percent }}%;"></div>
+                                </div>
+                            </div>
+                            {% else %}
+                            <span style="color:#bbb; font-size:0.85rem;">No Record</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="no-results">
+                    <i class="bi bi-inbox"></i>
+                    <h3>No Subjects Found</h3>
+                    <p>No subjects added for Semester {{ semester }} yet.</p>
+                </div>
+                {% endif %}
+            </div>
+
+            {% if records %}
+            <div class="summary-stats">
+                <div class="stat-card {% if avg_attendance >= 75 %}stat-good{% elif avg_attendance >= 50 %}stat-warning{% else %}stat-danger{% endif %}">
+                    <h4>Average Attendance</h4>
+                    <p>{{ avg_attendance }}%</p>
+                </div>
+                <div class="stat-card stat-good">
+                    <h4>Subjects Covered</h4>
+                    <p>{{ records|length }}</p>
+                </div>
+            </div>
+            {% endif %}
+
+            {% else %}
+            <div class="no-results">
+                <i class="bi bi-calendar-event"></i>
+                <h3>Select a Semester</h3>
+                <p>Choose a semester from the tabs above to view your attendance.</p>
+            </div>
+            {% endif %}
+
+            <div style="text-align:center; margin-top:2rem;">
+                <a href="/dashboard" class="btn-vv-outline" style="padding:0.8rem 2rem; border-radius:25px; text-decoration:none; display:inline-block;">
+                    <i class="bi bi-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+
+    {% include 'footer.html' %}
+</body>
+</html>

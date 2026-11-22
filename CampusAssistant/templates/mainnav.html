@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    /* same nav style as nav.html, with admin links */
+    .nav-icon-link {
+      color: rgba(255,255,255,0.95);
+      font-size: 1.35rem;
+      padding: 0.65rem 1.15rem;
+      transition: all 0.3s ease;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      min-width: 46px;
+    }
+    .nav-icon-link:hover {
+      color: white;
+      background: rgba(255,255,255,0.2);
+      transform: translateY(-2px);
+    }
+
+    .nav-icons-container {
+      display: flex;
+      gap: 0.8rem;
+      margin-left: auto;
+      align-items: center;
+    }
+
+    .nav-icons-container .nav-link {
+      color: rgba(255,255,255,0.9) !important;
+      font-size: 1.1rem;
+      font-weight: 650;
+      padding: 0.6rem 0.3rem;
+      line-height: 1;
+      border-radius: 12px;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+    .nav-icons-container .nav-link:hover {
+      background: rgba(255,255,255,0.15);
+      color: white !important;
+      transform: translateY(-1px);
+    }
+
+    @media (max-width: 992px) {
+      .nav-icons-container { gap: 0.6rem; }
+      .nav-icons-container .nav-link { font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-custom">
+    <div class="container">
+      <div style="display: flex; align-items: center; width: 100%;">
+        <a href="/" class="nav-icon-link" title="Home">
+          <i class="fas fa-home"></i>
+        </a>
+
+        <a class="navbar-brand" href="/department-dashboard" style="margin-left: 0.7rem; font-size: 1.5rem;">
+          Campus Assistant
+        </a>
+
+        
+    </div>
+  </nav>
+</body>
+</html>
+
+

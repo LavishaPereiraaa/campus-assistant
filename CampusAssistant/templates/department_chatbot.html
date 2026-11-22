@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Department Assistant - Campus Assistant</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='dark_theme.css') }}">
+</head>
+<body class="chat-page">
+    <nav class="dash-nav">
+        <a href="/" class="brand"><i class="fa-solid fa-building-columns" style="margin-right:0.5rem;"></i>Campus Assistant</a>
+        <div class="dash-nav-links">
+            <a href="/department-dashboard" class="dept-nav">Dashboard</a>
+            <a href="/department-attendance" class="dept-nav">Attendance</a>
+            <a href="/department-timetable" class="dept-nav">Timetable</a>
+            <a href="/department-exam" class="dept-nav">Exam</a>
+            <a href="/department-placement" class="dept-nav">Placement</a>
+            <a href="/department-subjects" class="dept-nav">Subjects</a>
+            <a href="/department-chatbot" class="dept-nav"><i class="fa-solid fa-comments"></i> Chat</a>
+            <a href="/department-login" class="logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+        </div>
+    </nav>
+
+    <div class="chat-wrapper-dark">
+        <!-- Header -->
+        <div class="chat-header-dark dept">
+            <a href="/department-dashboard" class="chat-back-btn"><i class="fa-solid fa-arrow-left"></i></a>
+            <i class="fa-solid fa-building-user"></i>
+            <h2>Department Assistant</h2>
+            <span style="font-size:0.8rem; opacity:0.7; margin-left:auto;">Admin AI</span>
+        </div>
+
+        <!-- Messages -->
+        <div class="chat-messages-dark" id="chatMessages">
+            <div class="chat-message bot dept">
+                <div class="chat-avatar" style="background: linear-gradient(135deg,#ec4899,#f43f5e);"><i class="fa-solid fa-robot"></i></div>
+                <div>
+                    <div class="chat-bubble">Hello! I'm the Department Assistant. I can help you with:<br><br>
+                    • Attendance records &amp; analytics<br>
+                    • Student performance reports<br>
+                    • Timetable &amp; exam scheduling<br>
+                    • Placement statistics<br>
+                    • Semester-wise analytics<br><br>
+                    What would you like help with?</div>
+                    <div class="chat-msg-time" id="botInitTime"></div>
+                </div>
+            </div>
+
+            {% if session.get('last_question') and session.get('last_source') == 'department' %}
+            <div class="chat-message user">
+                <div class="chat-avatar"><i class="fa-solid fa-user"></i></div>
+                <div><div class="chat-bubble">{{ session.get('last_question') }}</div></div>
+            </div>
+            <div class="chat-message bot dept">
+                <div class="chat-avatar" style="background: linear-gradient(135deg,#ec4899,#f43f5e);"><i class="fa-solid fa-robot"></i></div>
+                <div><div class="chat-bubble">{{ session.get('last_response') }}</div></div>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Suggestions -->
+        <div class="chat-suggestions-dark" id="suggestionsSection" style="display:none;">
+            <div class="suggestions-label"><i class="fa-solid fa-wand-magic-sparkles" style="color:#ec4899;"></i> Suggested Questions</div>
+            <div class="suggestions-chips" id="suggestionsRow"></div>
+        </div>
+
+        <!-- Input -->
+        <div class="chat-input-dark">
+            <form id="chatForm" class="chat-form-dark dept">
+                <input type="text" id="chatInput" placeholder="Ask about attendance, analytics, placements..." required autocomplete="off">
+                <button type="submit"><i class="fa-solid fa-paper-plane"></i> Send</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+    const chatMessages = document.getElementById('chatMessages');
+    const chatForm = document.getElementById('chatForm');
+    const chatInput = document.getElementById('chatInput');
+
+    document.getElementById('botInitTime').textContent = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    function addMessage(content, isUser) {
+        const div = document.createElement('div');
+        div.className = 'chat-message ' + (isUser ? 'user' : 'bot dept');
+        const time = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+        const avatarStyle = isUser ? '' : 'style="background: linear-gradient(135deg,#ec4899,#f43f5e);"';
+        div.innerHTML = isUser
+            ? `<div class="chat-avatar"><i class="fa-solid fa-user"></i></div><div><div class="chat-bubble">${content}</div><div class="chat-msg-time">${time}</div></div>`
+            : `<div class="chat-avatar" ${avatarStyle}><i class="fa-solid fa-robot"></i></div><div><div class="chat-bubble">${content}</div><div class="chat-msg-time">${time}</div></div>`;
+        chatMessages.appendChild(div);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function showTyping() {
+        const div = document.createElement('div');
+        div.className = 'chat-message bot'; div.id = 'typingIndicator';
+        div.innerHTML = `<div class="chat-avatar" style="background:linear-gradient(135deg,#ec4899,#f43f5e);"><i class="fa-solid fa-robot"></i></div><div class="typing-dark" style="--dot-color:#ec4899;"><span style="background:#ec4899;"></span><span style="background:#ec4899;"></span><span style="background:#ec4899;"></span></div>`;
+        chatMessages.appendChild(div); chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+    function hideTyping() { const el = document.getElementById('typingIndicator'); if(el) el.remove(); }
+
+    function renderSuggestions(items) {
+        const sec = document.getElementById('suggestionsSection');
+        const row = document.getElementById('suggestionsRow');
+        if(!items || !items.length) { sec.style.display='none'; return; }
+        sec.style.display = 'block'; row.innerHTML = '';
+        items.forEach((it, idx) => {
+            const btn = document.createElement('button');
+            btn.type = 'button'; btn.className = 'suggestion-chip-dark dept';
+            btn.style.animationDelay = (idx * 60) + 'ms';
+            btn.onclick = () => { chatInput.value = it.q; chatForm.requestSubmit(); };
+            btn.innerHTML = `<i class="${it.icon || 'fa-solid fa-sparkles'}"></i> ${it.q}`;
+            row.appendChild(btn);
+        });
+    }
+
+    chatForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const message = chatInput.value.trim();
+        if(!message) return;
+        addMessage(message, true);
+        chatInput.value = '';
+        showTyping();
+        try {
+            const res = await fetch('/api/chat/department', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({message}) });
+            const data = await res.json();
+            hideTyping();
+            if(data.suggestions) renderSuggestions(data.suggestions);
+            addMessage(data.reply || 'Sorry, something went wrong.', false);
+        } catch(err) {
+            hideTyping();
+            addMessage('Error connecting to server. Please try again.', false);
+        }
+    });
+    </script>
+</body>
+</html>

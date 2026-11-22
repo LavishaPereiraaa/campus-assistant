@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Department - Timetable Management</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .page-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 1.5rem 2rem; border-radius: 12px; margin-bottom: 1.5rem; }
+        .page-header h2 { margin: 0 0 0.3rem; }
+        .page-header p { margin: 0; opacity: 0.9; }
+
+        .filter-section { display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-end; padding: 1rem; background: #f8f9fa; border-radius: 12px; margin-bottom: 1.5rem; }
+        .filter-group { display: flex; flex-direction: column; gap: 0.3rem; }
+        .filter-group label { font-size: 0.85rem; color: #666; font-weight: 600; }
+        .filter-group select, .filter-group input { padding: 0.7rem 1rem; border-radius: 8px; border: 1px solid #ddd; min-width: 180px; }
+
+        .semester-tabs { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; justify-content: center; }
+        .semester-tab { padding: 0.7rem 1.5rem; border: 2px solid #667eea; border-radius: 25px; text-decoration: none; color: #667eea; font-weight: 600; transition: all 0.3s ease; }
+        .semester-tab:hover { background: #667eea; color: white; }
+        .semester-tab.active { background: #667eea; color: white; }
+
+        .section-card { border: none; border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        .section-card h4 { margin: 0 0 1rem; color: #333; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem; padding-bottom: 0.8rem; border-bottom: 2px solid #667eea; }
+        .section-card h4 i { color: #667eea; }
+
+        .student-list { border: 1px solid #eee; border-radius: 12px; overflow: hidden; max-height: 300px; overflow-y: auto; }
+        .student-item { display: flex; align-items: center; justify-content: space-between; padding: 0.8rem 1.2rem; border-bottom: 1px solid #eee; transition: background 0.2s; }
+        .student-item:last-child { border-bottom: none; }
+        .student-item:hover { background: #f9f9f9; }
+        .student-item .student-id { font-weight: 700; color: #667eea; margin-right: 0.5rem; }
+        .student-item .student-name { color: #333; flex: 1; }
+
+        .timetable-table { width: 100%; border-collapse: separate; border-spacing: 0; }
+        .timetable-table th { background: #667eea; color: white; padding: 1rem; text-align: left; font-weight: 600; }
+        .timetable-table th:first-child { border-radius: 12px 0 0 0; }
+        .timetable-table th:last-child { border-radius: 0 12px 0 0; }
+        .timetable-table td { padding: 1rem; border-bottom: 1px solid #eee; }
+        .timetable-table tr:last-child td { border-bottom: none; }
+        .timetable-table tr:hover td { background: #f9f9f9; }
+        .timetable-table .day-cell { font-weight: 600; color: #667eea; min-width: 100px; }
+
+        .empty-state { text-align: center; padding: 3rem 1rem; color: #888; }
+        .empty-state i { font-size: 3rem; color: #ddd; margin-bottom: 1rem; display: block; }
+        .empty-state p { margin: 0; }
+
+        .btn-add { background: #667eea !important; color: white !important; border: none !important; }
+        .btn-add:hover { background: #5a6fd1 !important; }
+
+        .promote-section { background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; }
+        .promote-section h4 { margin: 0 0 1rem; color: #333; display: flex; align-items: center; gap: 0.5rem; }
+        .promote-section h4 i { color: #11998e; }
+        .promote-form { display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-end; }
+        .promote-btn { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%) !important; color: white !important; border: none !important; }
+        .promote-btn:hover { opacity: 0.9; }
+
+        .student-stats { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1.5rem; }
+        .stat-badge { background: #667eea; color: white; padding: 0.8rem 1.5rem; border-radius: 25px; text-align: center; }
+        .stat-badge strong { font-size: 1.5rem; display: block; }
+        .stat-badge span { font-size: 0.85rem; opacity: 0.9; }
+    </style>
+</head>
+<body>
+    {% include 'department_module_nav.html' %}
+
+    <div style="max-width:1200px; margin:1rem auto 0; padding:0 1rem;">
+        <a href="/department-dashboard" class="btn-vv-outline" style="padding:0.5rem 1rem; border-radius:20px;">
+            <i class="bi bi-arrow-left"></i> Back to Dashboard
+        </a>
+    </div>
+
+    <div class="main-content">
+        <div class="vv-card" style="max-width:1200px;">
+            <div class="page-header">
+                <h2><i class="bi bi-table"></i> Timetable Management</h2>
+                <p>Manage class schedule semester-wise and department-wise</p>
+            </div>
+
+            <div class="filter-section">
+                <form method="GET" action="/department-timetable" id="filterForm">
+                    <div style="display:flex; gap:1rem; flex-wrap:wrap; align-items:flex-end;">
+                        <div class="filter-group">
+                            <label>Department</label>
+                            <select name="department" onchange="document.getElementById('filterForm').submit()" required>
+                                <option value="">-- Select Department --</option>
+                                <option value="Computer Science" {% if department=='Computer Science' %}selected{% endif %}>Computer Science</option>
+                                <option value="Electronics" {% if department=='Electronics' %}selected{% endif %}>Electronics</option>
+                                <option value="Mechanical" {% if department=='Mechanical' %}selected{% endif %}>Mechanical</option>
+                                <option value="Civil" {% if department=='Civil' %}selected{% endif %}>Civil</option>
+                                <option value="Electrical" {% if department=='Electrical' %}selected{% endif %}>Electrical</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            {% if department %}
+            <div class="semester-tabs">
+                {% for s in [1, 2, 3, 4] %}
+                <a href="/department-timetable?department={{ department }}&semester={{ s }}" class="semester-tab {% if semester|int == s %}active{% endif %}">
+                    <i class="bi bi-journal-bookmark"></i> Semester {{ s }}
+                </a>
+                {% endfor %}
+            </div>
+
+            {% if students %}
+            <div class="student-stats">
+                <div class="stat-badge">
+                    <strong>{{ students|length }}</strong>
+                    <span>Total Students</span>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if semester %}
+            <div class="promote-section">
+                <h4><i class="bi bi-arrow-right-circle"></i> Promote Timetable to Next Semester</h4>
+                <form method="POST" action="/department-promote-students" class="promote-form">
+                    <input type="hidden" name="department" value="{{ department }}">
+                    <div class="filter-group">
+                        <label>From Semester</label>
+                        <select name="from_semester" required>
+                            <option value="">-- Select --</option>
+                            {% for s in [1, 2, 3] %}
+                            <option value="{{ s }}">Semester {{ s }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>To Semester</label>
+                        <select name="to_semester" required>
+                            <option value="">-- Select --</option>
+                            {% for s in [2, 3, 4] %}
+                            <option value="{{ s }}">Semester {{ s }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-vv promote-btn" style="padding:0.7rem 1.5rem; border-radius:8px;">
+                        <i class="bi bi-arrow-right"></i> Promote Timetable
+                    </button>
+                </form>
+            </div>
+
+            <div class="section-card">
+                <h4><i class="bi bi-people"></i> Students in {{ department }} (Semester {{ semester }})</h4>
+                {% if students %}
+                <div class="student-list">
+                    {% for s in students %}
+                    <div class="student-item">
+                        <div>
+                            <span class="student-id">{{ s[0] }}</span>
+                            <span class="student-name">{{ s[1] }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="empty-state">
+                    <i class="bi bi-people"></i>
+                    <p>No students found in {{ department }}.</p>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="section-card">
+                <h4><i class="bi bi-plus-circle"></i> Add Timetable Entry for Semester {{ semester }}</h4>
+                <form method="POST" action="/department-timetable/create">
+                    <input type="hidden" name="department" value="{{ department }}">
+                    <input type="hidden" name="semester" value="{{ semester }}">
+                    <div style="display:flex; gap:1rem; flex-wrap:wrap; align-items:flex-end;">
+                        <div class="filter-group">
+                            <label>Day</label>
+                            <select name="day" required style="min-width:150px;">
+                                <option value="">-- Select Day --</option>
+                                <option value="Monday">Monday</option>
+                                <option value="Tuesday">Tuesday</option>
+                                <option value="Wednesday">Wednesday</option>
+                                <option value="Thursday">Thursday</option>
+                                <option value="Friday">Friday</option>
+                                <option value="Saturday">Saturday</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Subject</label>
+                            <input type="text" name="subject" placeholder="e.g. Programming in C" required style="min-width:200px;">
+                        </div>
+                        <button type="submit" class="btn-vv btn-add" style="padding:0.7rem 1.5rem; border-radius:8px;">
+                            <i class="bi bi-plus"></i> Add Entry
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="section-card">
+                <h4><i class="bi bi-calendar-week"></i> Timetable for Semester {{ semester }}</h4>
+                {% if records %}
+                <table class="timetable-table">
+                    <thead>
+                        <tr>
+                            <th><i class="bi bi-calendar-day"></i> Day</th>
+                            <th><i class="bi bi-book"></i> Subject</th>
+                            <th><i class="bi bi-tools"></i> Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in records %}
+                        <tr>
+                            <td class="day-cell">{{ row[1] }}</td>
+                            <td>{{ row[2] }}</td>
+                            <td>
+                                <a class="btn-vv-outline" href="/department-timetable/edit/{{ row[0] }}?department={{ department }}&semester={{ semester }}" style="padding:0.3rem 0.6rem; font-size:0.8rem;">
+                                    <i class="bi bi-pencil"></i> Edit
+                                </a>
+                                <a class="btn-vv-outline" href="/department-timetable/delete/{{ row[0] }}?department={{ department }}&semester={{ semester }}" onclick="return confirm('Delete this entry?')" style="padding:0.3rem 0.6rem; font-size:0.8rem; color:#f44336; border-color:#f44336;">
+                                    <i class="bi bi-trash"></i> Delete
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <div class="empty-state">
+                    <i class="bi bi-inbox"></i>
+                    <p>No timetable entries for this semester. Add entries above.</p>
+                </div>
+                {% endif %}
+            </div>
+
+            {% if subjects %}
+            <div class="section-card">
+                <h4><i class="bi bi-book"></i> Subjects in Semester {{ semester }}</h4>
+                <div class="student-list">
+                    {% for subj in subjects %}
+                    <div class="student-item">
+                        <div>
+                            <span class="student-id">{{ subj[2] }}</span>
+                            <span class="student-name">{{ subj[1] }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            {% else %}
+            <div class="empty-state" style="padding:4rem;">
+                <i class="bi bi-filter"></i>
+                <p style="font-size:1.1rem;">Select a semester to manage timetable.</p>
+            </div>
+            {% endif %}
+
+            {% else %}
+            <div class="empty-state" style="padding:4rem;">
+                <i class="bi bi-building"></i>
+                <p style="font-size:1.1rem;">Select department to manage timetable.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <footer class="footer-vv">
+        <p>Campus Assistant &copy; 2025</p>
+    </footer>
+</body>
+</html>

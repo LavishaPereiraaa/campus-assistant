@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin - Edit Attendance</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    {% include 'admin_module_nav.html' %}
+
+    <div class="main-content">
+        <div class="vv-card" style="max-width:700px;">
+            <div class="vv-card-header">
+                <h3>Edit Attendance</h3>
+            </div>
+
+            <form method="POST" action="/department-attendance/update/{{ record[0] }}" class="form-vv">
+                <input type="text" name="department" placeholder="Department" required value="{{ record[1] }}">
+
+                <input type="date" name="attendance_date" placeholder="Attendance Date" required value="{{ record[2] }}">
+
+                <input type="text" name="student_id" placeholder="Student ID" required value="{{ record[3] }}">
+
+                <input type="number" name="attendance_percent" placeholder="Attendance %" min="0" max="100" required value="{{ record[4] }}">
+
+                <button type="submit" class="btn-vv">Update</button>
+            </form>
+
+            <a href="/department-attendance?department={{ record[1] }}" class="btn-vv-outline" style="display:inline-block; margin-top:1rem;">Back</a>
+        </div>
+    </div>
+</body>
+</html>
+

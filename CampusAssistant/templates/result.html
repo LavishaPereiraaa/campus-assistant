@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Assistant Reply</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/gurj/vvvebjs@master/dist/css/vvvebjs.min.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/gh/gurj/vvvebjs@master/dist/js/vvvebjs.min.js"></script>
+</head>
+<body>
+    {% include "nav.html" %}
+
+<div class="vv-container">
+    <div class="vv-card">
+        <div class="vv-card-header">
+            <i class="fa-solid fa-circle-check"></i>
+            <span>Campus Assistant Reply</span>
+        </div>
+
+        <div class="vv-card-body">
+            <div class="vv-field">
+                <strong>Your Question</strong>
+                <p class="vv-muted">{{ question }}</p>
+            </div>
+
+            <div class="vv-field">
+                <strong>Assistant Response</strong>
+                <p class="vv-muted">{{ response }}</p>
+            </div>
+        </div>
+
+        <div class="vv-card-footer vv-actions">
+            <a class="vv-btn" href="/chatbot">
+                <i class="fa-solid fa-rotate-left"></i>
+                Ask Another Question
+            </a>
+            <a class="vv-btn" href="/dashboard">
+                <i class="fa-solid fa-house"></i>
+                Back to Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+
+{% include "footer.html" %}
+</body>
+</html>

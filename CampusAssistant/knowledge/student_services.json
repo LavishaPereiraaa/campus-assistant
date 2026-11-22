@@ -1,0 +1,32 @@
+{
+    "hostel": {
+        "available": true,
+        "rooms": "Single, Double, Triple sharing",
+        "fee": "Rs. 30,000 - Rs. 50,000 per year",
+        "facilities": ["WiFi", "Mess", "Power backup", "Security"]
+    },
+    "transport": {
+        "available": true,
+        "routes": "All major areas in Bangalore",
+        "fee": "Rs. 15,000 per semester"
+    },
+    "canteen": {
+        "timing": "7 AM to 7 PM",
+        "payment": "Card or UPI"
+    },
+    "medical": {
+        "facility": "First aid in campus",
+        "hospital": "Referral to nearby hospital",
+        "insurance": "Group medical insurance"
+    },
+    "banking": {
+        "atm": "ATM on campus",
+        "bank": "Bank extension counter"
+    },
+    "query_patterns": {
+        "hostel": "Is hostel available",
+        "transport": "Is transport available",
+        "canteen": "Canteen timing",
+        "medical": "Medical facilities"
+    }
+}

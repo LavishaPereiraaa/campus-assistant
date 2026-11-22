@@ -1,0 +1,4 @@
+Append-only update prepared.
+Current max ::id observed: 19999
+New ids will start from 20000.
+

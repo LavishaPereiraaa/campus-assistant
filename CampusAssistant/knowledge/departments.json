@@ -1,0 +1,44 @@
+{
+    "departments": [
+        {
+            "code": "CSE",
+            "name": "Computer Science and Engineering",
+            "established": 2005,
+            "intake": 120,
+            "features": ["AI/ML Lab", "Data Analytics", "Web Development", "Cybersecurity"]
+        },
+        {
+            "code": "ECE",
+            "name": "Electronics and Communication Engineering",
+            "established": 2006,
+            "intake": 60,
+            "features": ["VLSI Design", "Embedded Systems", "Communication Networks"]
+        },
+        {
+            "code": "ME",
+            "name": "Mechanical Engineering",
+            "established": 2005,
+            "intake": 60,
+            "features": ["CAD/CAM", "Thermal Engineering", "Manufacturing"]
+        },
+        {
+            "code": "CE",
+            "name": "Civil Engineering",
+            "established": 2007,
+            "intake": 60,
+            "features": ["Structural Engineering", "Environmental Engineering"]
+        },
+        {
+            "code": "EE",
+            "name": "Electrical Engineering",
+            "established": 2008,
+            "intake": 60,
+            "features": ["Power Systems", "Control Systems", "Electrical Machines"]
+        }
+    ],
+    "query_patterns": {
+        "department_info": "Tell about department",
+        "department_facilities": "What facilities are available",
+        "department_achievements": "Department achievements"
+    }
+}

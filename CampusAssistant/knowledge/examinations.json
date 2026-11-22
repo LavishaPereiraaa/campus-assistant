@@ -1,0 +1,64 @@
+{
+    "entries": [
+        {
+            "Category": "Examinations",
+            "Intent": "exam_schedule_query",
+            "Priority": 10,
+            "Keywords": ["exam schedule", "exam dates", "exam timetable", "exam timing"],
+            "Synonyms": ["when exams", "exam timing", "exam dates", "semester exam"],
+            "Related Questions": ["When are exams?", "Exam schedule?", "Exam dates?"],
+            "Alternative Phrases": ["exam kab", "exam timing"],
+            "Answer": "**Exam Schedule**\n\n• **Semester Exams**: December (Odd), May (Even)\n• **Internal Tests**: September (Odd), March (Even)\n• **Exam Timetable**: Published 2 weeks before exams\n• **Mode**: Offline written examination\n\nCheck the student portal or notice board for exact dates."
+        },
+        {
+            "Category": "Examinations",
+            "Intent": "exam_rules_query",
+            "Priority": 9,
+            "Keywords": ["exam rules", "exam instructions", "hall ticket", "exam guidelines"],
+            "Synonyms": ["exam instructions", "carry hall ticket", "what to carry", "exam guidelines"],
+            "Related Questions": ["Exam rules?", "What to carry to exam?", "Hall ticket?"],
+            "Alternative Phrases": ["exam rules", "hall ticket"],
+            "Answer": "**Examination Rules**\n\n• Carry **hall ticket** for all exams\n• Reach exam hall **15 minutes early**\n• **No electronic devices** allowed\n• Rough sheets **provided** at exam center\n• **Biometric attendance** for all exams\n• Carry your **college ID**\n\nViolation leads to disqualification."
+        },
+        {
+            "Category": "Examinations",
+            "Intent": "passing_criteria_query",
+            "Priority": 9,
+            "Keywords": ["passing marks", "minimum marks", "pass criteria", "passing criteria"],
+            "Synonyms": ["pass", "minimum marks", "how to pass", "passing criteria"],
+            "Related Questions": ["Passing criteria?", "Minimum marks?", "How to pass exams?"],
+            "Alternative Phrases": ["pass kaise", "kitne marks chahiye"],
+            "Answer": "**Passing Criteria**\n\n• Minimum **40% marks** in each subject\n• **Internal Assessment**: Based on tests, assignments, attendance (30%)\n• **External Exam**: 70% weightage\n• Minimum **5.0 CGPA** overall for degree\n\nMust clear both internal and external components."
+        },
+        {
+            "Category": "Examinations",
+            "Intent": "exam_timetable_query",
+            "Priority": 8,
+            "Keywords": ["exam timetable", "hall ticket", "exam venue", "exam room"],
+            "Synonyms": ["where is my exam", "exam venue", "exam center", "room number"],
+            "Related Questions": ["Exam timetable?", "Where is my exam?", "Hall ticket?"],
+            "Alternative Phrases": ["hall ticket", "exam room"],
+            "Answer": "**Exam Timetable**\n\n• Published **15 days before** exam start\n• Check your **hall ticket** for venue and room number\n• Download from student portal\n• In case of discrepancy, contact examination cell immediately."
+        },
+        {
+            "Category": "Examinations",
+            "Intent": "exam_result_query",
+            "Priority": 8,
+            "Keywords": ["exam result", "result date", "result declaration", "when result"],
+            "Synonyms": ["result", "marks", "when result", "result declared"],
+            "Related Questions": ["When do results come?", "Result date?", "Results declared?"],
+            "Alternative Phrases": ["result kab", "marks kab aayenge"],
+            "Answer": "**Result Declaration**\n\n• Semester results: **January** (Odd), **June** (Even)\n• Revaluation results: 2 weeks after applying\n• Check student portal for results\n• Contact exam cell for discrepancies"
+        },
+        {
+            "Category": "Examinations",
+            "Intent": "revaluation_query",
+            "Priority": 8,
+            "Keywords": ["revaluation", "recheck", "revaluation form", "photocopy"],
+            "Synonyms": ["recheck", "revaluation", "answer copy", "revaluation process"],
+            "Related Questions": ["How to apply for revaluation?", "Recheck marks", "Apply revaluation"],
+            "Alternative Phrases": ["recheck kaise le", "marks recheck"],
+            "Answer": "**Revaluation Process**\n\n• Apply within **7 days** of result declaration\n• Form available at **Examination Cell**\n• Fee: **Rs. 500 per subject**\n• Results within **2 weeks**\n\nNote: Revaluation may increase or decrease marks."
+        }
+    ]
+}

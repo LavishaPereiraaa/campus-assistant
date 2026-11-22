@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Department - Subject Management</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .page-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 1.5rem 2rem; border-radius: 12px; margin-bottom: 1.5rem; }
+        .page-header h2 { margin: 0 0 0.3rem; }
+        .page-header p { margin: 0; opacity: 0.9; }
+
+        .filter-section { display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-end; padding: 1rem; background: #f8f9fa; border-radius: 12px; margin-bottom: 1.5rem; }
+        .filter-group { display: flex; flex-direction: column; gap: 0.3rem; }
+        .filter-group label { font-size: 0.85rem; color: #666; font-weight: 600; }
+        .filter-group select, .filter-group input { padding: 0.7rem 1rem; border-radius: 8px; border: 1px solid #ddd; min-width: 180px; }
+
+        .semester-tabs { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; justify-content: center; }
+        .semester-tab { padding: 0.7rem 1.5rem; border: 2px solid #667eea; border-radius: 25px; text-decoration: none; color: #667eea; font-weight: 600; transition: all 0.3s ease; }
+        .semester-tab:hover { background: #667eea; color: white; }
+        .semester-tab.active { background: #667eea; color: white; }
+
+        .section-card { border: none; border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        .section-card h4 { margin: 0 0 1rem; color: #333; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem; padding-bottom: 0.8rem; border-bottom: 2px solid #667eea; }
+        .section-card h4 i { color: #667eea; }
+
+        .subject-list { border: 1px solid #eee; border-radius: 12px; overflow: hidden; }
+        .subject-item { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.2rem; border-bottom: 1px solid #eee; transition: background 0.2s; }
+        .subject-item:last-child { border-bottom: none; }
+        .subject-item:hover { background: #f9f9f9; }
+        .subject-item .subject-code { font-weight: 700; color: #667eea; margin-right: 0.5rem; }
+        .subject-item .subject-name { color: #333; flex: 1; }
+        .subject-item .subject-actions { display: flex; gap: 0.5rem; }
+
+        .empty-state { text-align: center; padding: 3rem 1rem; color: #888; }
+        .empty-state i { font-size: 3rem; color: #ddd; margin-bottom: 1rem; display: block; }
+        .empty-state p { margin: 0; }
+
+        .btn-add { background: #667eea !important; color: white !important; border: none !important; }
+        .btn-add:hover { background: #5a6fd1 !important; }
+
+        .btn-edit { color: #667eea !important; border-color: #667eea !important; }
+        .btn-edit:hover { background: #667eea !important; color: white !important; }
+
+        .btn-delete { color: #f44336 !important; border-color: #f44336 !important; }
+        .btn-delete:hover { background: #f44336 !important; color: white !important; }
+
+        .subject-item.editing { background: #f0f9ff; }
+        .subject-item input { padding: 0.5rem; border-radius: 6px; border: 1px solid #ddd; font-size: 0.9rem; }
+        .subject-item .edit-actions { display: none; gap: 0.5rem; }
+        .subject-item.editing .edit-actions { display: flex; }
+        .subject-item.editing .subject-actions { display: none; }
+        .subject-item.editing .subject-code,
+        .subject-item.editing .subject-name { display: none; }
+        .subject-item .edit-input-group { display: none; }
+        .subject-item.editing .edit-input-group { display: flex; gap: 0.5rem; flex: 1; align-items: center; }
+        .subject-item .view-group { display: flex; align-items: center; flex: 1; }
+    </style>
+</head>
+<body>
+    {% include 'department_module_nav.html' %}
+
+    <div style="max-width:1200px; margin:1rem auto 0; padding:0 1rem;">
+        <a href="/department-dashboard" class="btn-vv-outline" style="padding:0.5rem 1rem; border-radius:20px;">
+            <i class="bi bi-arrow-left"></i> Back to Dashboard
+        </a>
+    </div>
+
+    <div class="main-content">
+        <div class="vv-card" style="max-width:1200px;">
+            <div class="page-header">
+                <h2><i class="bi bi-book"></i> Subject Management</h2>
+                <p>Manage subjects by department and semester</p>
+            </div>
+
+            <div class="filter-section">
+                <form method="GET" action="/department-subjects" id="filterForm">
+                    <div style="display:flex; gap:1rem; flex-wrap:wrap; align-items:flex-end;">
+                        <div class="filter-group">
+                            <label>Department</label>
+                            <select name="department" onchange="document.getElementById('filterForm').submit()" required>
+                                <option value="">-- Select Department --</option>
+                                <option value="Computer Science" {% if department=='Computer Science' %}selected{% endif %}>Computer Science</option>
+                                <option value="Electronics" {% if department=='Electronics' %}selected{% endif %}>Electronics</option>
+                                <option value="Mechanical" {% if department=='Mechanical' %}selected{% endif %}>Mechanical</option>
+                                <option value="Civil" {% if department=='Civil' %}selected{% endif %}>Civil</option>
+                                <option value="Electrical" {% if department=='Electrical' %}selected{% endif %}>Electrical</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            {% if department %}
+            <div class="semester-tabs">
+                {% for s in [1, 2, 3, 4] %}
+                <a href="/department-subjects?department={{ department }}&semester={{ s }}" class="semester-tab {% if semester|int == s %}active{% endif %}">
+                    <i class="bi bi-journal-bookmark"></i> Semester {{ s }}
+                </a>
+                {% endfor %}
+            </div>
+
+            {% if semester %}
+            <div class="section-card">
+                <h4><i class="bi bi-plus-circle"></i> Add Subject to Semester {{ semester }}</h4>
+                <form method="POST" action="/department-subjects/add">
+                    <input type="hidden" name="department" value="{{ department }}">
+                    <input type="hidden" name="semester" value="{{ semester }}">
+                    <div style="display:flex; gap:1rem; flex-wrap:wrap; align-items:flex-end;">
+                        <div class="filter-group">
+                            <label>Subject Code</label>
+                            <input type="text" name="subject_code" placeholder="e.g. CS101" required>
+                        </div>
+                        <div class="filter-group" style="flex:1; min-width:250px;">
+                            <label>Subject Name</label>
+                            <input type="text" name="subject_name" placeholder="e.g. Programming in C" required>
+                        </div>
+                        <button type="submit" class="btn-vv btn-add" style="padding:0.7rem 1.5rem; border-radius:8px;">
+                            <i class="bi bi-plus"></i> Add Subject
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="section-card">
+                <h4><i class="bi bi-list-check"></i> Subjects in Semester {{ semester }} - {{ department }}</h4>
+                {% if subjects %}
+                <div class="subject-list">
+                    {% for subj in subjects %}
+                    <div class="subject-item" id="subject-{{ subj[0] }}">
+                        <div class="view-group">
+                            <span class="subject-code">{{ subj[4] }}</span>
+                            <span class="subject-name">{{ subj[3] }}</span>
+                        </div>
+                        <div class="edit-input-group">
+                            <input type="text" name="code_{{ subj[0] }}" value="{{ subj[4] }}" style="width:100px;">
+                            <input type="text" name="name_{{ subj[0] }}" value="{{ subj[3] }}" style="flex:1;">
+                        </div>
+                        <div class="subject-actions">
+                            <button onclick="enableEdit('{{ subj[0] }}')" class="btn-vv-outline btn-edit" style="padding:0.3rem 0.6rem; font-size:0.8rem;">
+                                <i class="bi bi-pencil"></i> Edit
+                            </button>
+                            <a href="/department-subjects/delete/{{ subj[0] }}?department={{ department }}&semester={{ semester }}" onclick="return confirm('Delete this subject?')" class="btn-vv-outline btn-delete" style="padding:0.3rem 0.6rem; font-size:0.8rem;">
+                                <i class="bi bi-trash"></i> Delete
+                            </a>
+                        </div>
+                        <div class="edit-actions">
+                            <button onclick="saveEdit('{{ subj[0] }}', '{{ department }}', '{{ semester }}')" class="btn-vv btn-add" style="padding:0.3rem 0.6rem; font-size:0.8rem;">
+                                <i class="bi bi-check"></i> Save
+                            </button>
+                            <button onclick="cancelEdit('{{ subj[0] }}')" class="btn-vv-outline" style="padding:0.3rem 0.6rem; font-size:0.8rem;">
+                                <i class="bi bi-x"></i> Cancel
+                            </button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="empty-state">
+                    <i class="bi bi-book"></i>
+                    <p>No subjects found for Semester {{ semester }}.</p>
+                    <a href="/department-subjects/seed?department={{ department }}" class="btn-vv btn-add" style="margin-top:1rem; display:inline-block; padding:0.7rem 1.5rem; border-radius:8px;">
+                        <i class="bi bi-magic"></i> Add Default Subjects (5 per semester)
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+
+            {% else %}
+            <div class="empty-state" style="padding:4rem;">
+                <i class="bi bi-filter"></i>
+                <p style="font-size:1.1rem;">Select a semester to manage subjects.</p>
+            </div>
+            {% endif %}
+
+            {% else %}
+            <div class="empty-state" style="padding:4rem;">
+                <i class="bi bi-building"></i>
+                <p style="font-size:1.1rem;">Select department to manage subjects.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <footer class="footer-vv">
+        <p>Campus Assistant &copy; 2025</p>
+    </footer>
+
+    <script>
+        function enableEdit(id) {
+            document.getElementById('subject-' + id).classList.add('editing');
+        }
+
+        function cancelEdit(id) {
+            document.getElementById('subject-' + id).classList.remove('editing');
+        }
+
+        function saveEdit(id, department, semester) {
+            const code = document.querySelector('input[name="code_' + id + '"]').value;
+            const name = document.querySelector('input[name="name_' + id + '"]').value;
+            window.location.href = '/department-subjects/edit/' + id + '?department=' + department + '&semester=' + semester + '&code=' + encodeURIComponent(code) + '&name=' + encodeURIComponent(name);
+        }
+    </script>
+</body>
+</html>

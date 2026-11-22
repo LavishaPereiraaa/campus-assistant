@@ -1,0 +1,101 @@
+/* Vvveb-style Bootstrap 5 Design */
+:root { --primary: #6c5ce7; --primary-dark: #5a4bd1; --secondary: #00cec9; --dark: #2d3436; --light: #f8f9fa; --gradient: linear-gradient(135deg, #6c5ce7 0%, #00cec9 100%); }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--light); min-height: 100vh; display: flex; flex-direction: column; }
+
+/* Navbar */
+.navbar-custom { background: var(--gradient) !important; padding: 1rem 2rem; box-shadow: 0 4px 20px rgba(108, 92, 231, 0.3); }
+.navbar-custom .navbar-brand { color: white; font-weight: 700; font-size: 1.5rem; }
+.navbar-custom .nav-link { color: rgba(255,255,255,0.9) !important; font-weight: 500; transition: all 0.3s ease; }
+.navbar-custom .nav-link:hover { color: white !important; transform: translateY(-2px); }
+.main-content { flex: 1; padding: 3rem 2rem; }
+.hero-section { background: var(--gradient); color: white; padding: 4rem 2rem; text-align: center; border-radius: 0 0 50px 50px; margin-bottom: 3rem; box-shadow: 0 10px 40px rgba(108, 92, 231, 0.3); }
+.hero-section h1 { font-size: 3rem; font-weight: 700; margin-bottom: 1rem; }
+.hero-section p { font-size: 1.3rem; opacity: 0.95; }
+.vv-card { background: white; border-radius: 20px; padding: 2.5rem; box-shadow: 0 10px 40px rgba(0,0,0,0.08); transition: transform 0.3s ease; border: none; max-width: 500px; margin: 0 auto; }
+.vv-card:hover { transform: translateY(-5px); box-shadow: 0 20px 60px rgba(108, 92, 231, 0.15); }
+.vv-card-header { background: var(--gradient); color: white; padding: 1.5rem; border-radius: 20px 20px 0 0; margin: -2.5rem -2.5rem 2rem -2.5rem; text-align: center; }
+.vv-card-header h3 { margin: 0; font-weight: 600; }
+.form-vv input, .form-vv select { width: 100%; padding: 1rem; border: 2px solid #e9ecef; border-radius: 12px; font-size: 1rem; transition: all 0.3s ease; margin-bottom: 1rem; background: var(--light); }
+.form-vv input:focus, .form-vv select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.1); background: white; }
+.form-vv input::placeholder { color: #adb5bd; }
+.btn-vv { background: var(--gradient); color: white; border: none; padding: 1rem 2.5rem; border-radius: 30px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3); width: 100%; display: block; text-align: center; }
+.btn-vv:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(108, 92, 231, 0.4); color: white; }
+.dashboard-card { background: white; border-radius: 20px; padding: 2rem; text-align: center; box-shadow: 0 5px 20px rgba(0,0,0,0.08); transition: all 0.3s ease; border: none; text-decoration: none; color: var(--dark); display: block; }
+.dashboard-card:hover { transform: translateY(-8px); box-shadow: 0 15px 40px rgba(108, 92, 231, 0.2); color: var(--primary); }
+.dashboard-card h5 { font-weight: 600; margin: 0.5rem 0 0; }
+.dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; max-width: 1000px; margin: 0 auto; }
+.table-vv { width: 100%; border-collapse: separate; border-spacing: 0 0.5rem; }
+.table-vv th { background: var(--gradient); color: white; padding: 1rem; font-weight: 600; text-align: left; }
+.table-vv th:first-child { border-radius: 12px 0 0 12px; }
+.table-vv th:last-child { border-radius: 0 12px 12px 0; }
+.table-vv td { background: white; padding: 1rem; }
+.table-vv tbody tr:hover td { background: #f8f9ff; }
+.footer-vv { background: var(--dark); color: white; text-align: center; padding: 1.5rem; margin-top: auto; }
+a { text-decoration: none; color: var(--primary); transition: color 0.3s ease; }
+a:hover { color: var(--primary-dark); }
+.text-muted-vv { color: #6c757d; margin-top: 1rem; display: block; text-align: center; }
+.icon-circle { font-size: 3rem; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.btn-nav { background: rgba(255,255,255,0.2); border: 2px solid white; color: white; padding: 0.5rem 1.5rem; border-radius: 30px; font-weight: 600; transition: all 0.3s ease; }
+.btn-nav:hover { background: white; color: var(--primary); }
+.btn-vv-outline { background: transparent; color: var(--primary); border: 2px solid var(--primary); padding: 0.8rem 2rem; border-radius: 30px; font-weight: 600; transition: all 0.3s ease; display: block; text-align: center; margin-top: 0.5rem; }
+.btn-vv-outline:hover { background: var(--primary); color: white; }
+@media (max-width: 768px) { .hero-section h1 { font-size: 2rem; } .vv-card { padding: 1.5rem; margin: 0 1rem; } }
+
+
+/* Student Profile Card */
+.student-profile-card {
+  background: white;
+  border-radius: 20px;
+  padding: 2.75rem;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+  display: flex;
+  align-items: center;
+  gap: 2.25rem;
+  max-width: 720px;
+  margin: 0 auto 2.25rem auto;
+}
+.profile-image-container { flex-shrink: 0; }
+.profile-image {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 5px solid var(--primary);
+  box-shadow: 0 5px 20px rgba(108, 92, 231, 0.2);
+}
+.profile-placeholder {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: var(--gradient);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.profile-placeholder i { font-size: 3.5rem; color: white; }
+.profile-info { flex: 1; }
+.student-name { color: var(--dark); margin-bottom: 0.75rem; font-weight: 800; font-size: 1.6rem; }
+.profile-info p { color: #666; margin: 0.45rem 0; font-size: 1.1rem; }
+.profile-info p i { color: var(--primary); width: 22px; margin-right: 0.6rem; }
+@media (max-width: 768px) { .student-profile-card { flex-direction: column; text-align: center; padding: 2rem; } }
+
+/* Dashboard header (Welcome + title) */
+.dashboard-header h1 { font-size: 2.2rem; font-weight: 800; }
+.dashboard-header p { font-size: 1.15rem; }
+
+/* Department chip in dashboard */
+.dashboard-header span[style*="#4CAF50"] { font-size: 1rem !important; padding: 0.4rem 1.1rem !important; }
+
+/* Button colors */
+.btn { padding: 0.4rem 0.7rem; text-decoration: none; border-radius: 6px; display: inline-block; }
+.btn-success { background: #28a745; color: white; }
+.btn-success:hover { background: #218838; color: white; }
+.btn-danger { background: #dc3545; color: white; }
+.btn-danger:hover { background: #c82333; color: white; }
+.btn-primary { background: #007bff; color: white; }
+.btn-primary:hover { background: #0069d9; color: white; }
+.btn-warning { background: #ffc107; color: #212529; }
+.btn-warning:hover { background: #e0a800; color: #212529; }
+.btn-sm { padding: 0.3rem 0.6rem; font-size: 0.875rem; }
+

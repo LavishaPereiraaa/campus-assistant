@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='dark_theme.css') }}">
+</head>
+<body>
+  <nav class="dash-nav">
+    <a href="/" class="brand"><i class="fa-solid fa-graduation-cap" style="margin-right:0.5rem;"></i>Campus Assistant</a>
+    <div class="dash-nav-links">
+      <a href="/dashboard">Dashboard</a>
+      <a href="/attendance">Attendance</a>
+      <a href="/timetable">Timetable</a>
+      <a href="/exam">Exams</a>
+      <a href="/student-result">Results</a>
+      <a href="/placement">Placement</a>
+      <a href="/chatbot"><i class="fa-solid fa-comments"></i> Chat</a>
+      <a href="/logout" class="logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+    </div>
+  </nav>
+  <a href="/chatbot" class="floating-chat" title="Chat" aria-label="Open chatbot" style="position:fixed;bottom:1.5rem;right:1.5rem;width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:flex;align-items:center;justify-content:center;color:white;font-size:1.3rem;text-decoration:none;box-shadow:0 8px 25px rgba(99,102,241,0.5);z-index:999;transition:all .3s ease;">
+    <i class="fa-solid fa-comments"></i>
+  </a>
+</body>
+</html>

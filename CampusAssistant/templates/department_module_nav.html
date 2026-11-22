@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='dark_theme.css') }}">
+</head>
+<body>
+  <nav class="dash-nav">
+    <a href="/" class="brand"><i class="fa-solid fa-building-columns" style="margin-right:0.5rem;"></i>Campus Assistant</a>
+    <div class="dash-nav-links">
+      <a href="/department-dashboard" class="dept-nav">Dashboard</a>
+      <a href="/department-attendance" class="dept-nav">Attendance</a>
+      <a href="/department-timetable" class="dept-nav">Timetable</a>
+      <a href="/department-exam" class="dept-nav">Exam</a>
+      <a href="/department-placement" class="dept-nav">Placement</a>
+      <a href="/department-subjects" class="dept-nav">Subjects</a>
+      <a href="/department-result" class="dept-nav" style="color:#fbbf24;">Results</a>
+      <a href="/department-chatbot" class="dept-nav"><i class="fa-solid fa-comments"></i> Chat</a>
+      <a href="/department-login" class="logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+    </div>
+  </nav>
+</body>
+</html>

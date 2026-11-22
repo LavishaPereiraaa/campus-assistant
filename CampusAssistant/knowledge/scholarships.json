@@ -1,0 +1,44 @@
+{
+    "entries": [
+        {
+            "Category": "Scholarships",
+            "Intent": "scholarship_query",
+            "Priority": 10,
+            "Keywords": ["scholarship", "scholarships", "schemes", "financial aid"],
+            "Synonyms": ["scholarship", "financial aid", "fee waiver", "schemes"],
+            "Related Questions": ["What scholarships are available?", "Scholarship schemes", "Financial aid"],
+            "Alternative Phrases": ["schemes", "fee waiver"],
+            "Answer": "**Available Scholarships**\n\n• **Government Scholarship**: For family income below Rs. 2.5 Lakhs (tuition fee waiver)\n• **Merit Scholarship**: CGPA 9.0+ (Rs. 10,000/semester)\n• **Minority Scholarship**: For minority community students\n• **SC/ST Scholarship**: Full tuition fee (through government portal)\n\nApply at the beginning of the academic year."
+        },
+        {
+            "Category": "Scholarships",
+            "Intent": "scholarship_apply_query",
+            "Priority": 9,
+            "Keywords": ["apply scholarship", "application", "scholarship form"],
+            "Synonyms": ["apply for scholarship", "scholarship application", "how to apply"],
+            "Related Questions": ["How to apply for scholarship?", "Apply scholarship", "Scholarship form"],
+            "Alternative Phrases": ["apply kaise", "form kaise bhare"],
+            "Answer": "**How to Apply**\n\n• **Government/Minority/SC-ST**: Apply through National Scholarship Portal (scholarships.gov.in)\n• **Merit Scholarship**: Apply through college office with marks card\n• Apply at **beginning** of academic year\n• Submit **income certificate** if required\n• Forms available at admin office"
+        },
+        {
+            "Category": "Scholarships",
+            "Intent": "scholarship_eligibility_query",
+            "Priority": 8,
+            "Keywords": ["scholarship eligibility", "eligible", "can apply"],
+            "Synonyms": ["eligible for scholarship", "can I apply", "scholarship criteria"],
+            "Related Questions": ["Am I eligible?", "Eligibility criteria", "Can I get scholarship?"],
+            "Alternative Phrases": ["eligibile kya", "scholarship milega"],
+            "Answer": "**Scholarship Eligibility**\n\n1. **Government**: Family income below Rs. 2.5 Lakhs, Indian resident\n2. **Merit**: CGPA 9.0 or above, no backlogs\n3. **Minority**: Belonging to minority community with income proof\n4. **SC/ST**: Valid caste certificate required\n\nMaintain required CGPA throughout the course."
+        },
+        {
+            "Category": "Scholarships",
+            "Intent": "scholarship_rules_query",
+            "Priority": 7,
+            "Keywords": ["scholarship rules", "scholarship conditions", "scholarship renewal"],
+            "Synonyms": ["scholarship terms", "conditions", "renewal"],
+            "Related Questions": ["Scholarship rules?", "Scholarship renewal?", "Conditions"],
+            "Alternative Phrases": ["renewal", "terms"],
+            "Answer": "**Scholarship Rules**\n\n• Apply at **beginning** of academic year\n• Maintain required **CGPA** to continue\n��� Submit **income certificate** renewed annually\n• **Renew** every semester with progress reports\n• Maintain **75%+ attendance**\n• Any backlogs may affect renewal"
+        }
+    ]
+}

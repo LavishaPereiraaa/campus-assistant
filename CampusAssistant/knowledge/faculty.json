@@ -1,0 +1,23 @@
+{
+    "faculty_qualifications": {
+        "professor": "PhD required",
+        "associate_professor": "PhD with 3+ years experience",
+        "assistant_professor": "MTech/PhD",
+        "guest_faculty": "MTech preferred"
+    },
+    "faculty_awards": {
+        "best_teacher": "Awarded annually",
+        "research_excellence": "For publications",
+        "industry_engagement": "For industry projects"
+    },
+    "consultation_hours": {
+        "timing": "2 PM to 4 PM on weekdays",
+        "appointment": "Through email or phone"
+    },
+    "query_patterns": {
+        "faculty_list": "List faculty members",
+        "faculty_details": "Faculty details",
+        "faculty_qualification": "Faculty qualifications",
+        "faculty_research": "Research areas"
+    }
+}

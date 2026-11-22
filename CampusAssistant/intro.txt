@@ -1,0 +1,307 @@
+PROJECT OVERVIEW: CampusAssistant (Flask + MySQL + Knowledge-based Chatbot)
+
+1) What the project is
+- A campus management + information chatbot web application.
+- Main app (Flask) provides student login, dashboard, academic pages (attendance, timetable, exams), results, and placements.
+- There is also a “Department Admin” area for managing academic data (attendance, timetable, exams, subjects, placements, marks, and results) and a department chatbot.
+- Chatbot functionality is exposed via JSON endpoints under a Flask Blueprint, and uses a knowledge base (JSON) + intent classification.
+
+2) Tech stack / components
+- Backend: Python 3, Flask
+- Database: MySQL (connect_db and schema initialization/migrations exist)
+- Chatbot subsystem:
+  - Flask Blueprint: chatbot_core/blueprint.py exposes AJAX endpoints.
+  - Router: chatbot_core/router.py dispatches user messages into student/department/general pipelines.
+  - Intent classification: chatbot_core/intent_classifier.py
+  - Knowledge answering: chatbot_core/knowledge_loader.py, chatbot_core/knowledge_answerer.py
+  - Context memory: chatbot_core/context_memory.py
+  - Services:
+    - chatbot_core/student_service.py (student academic queries)
+    - chatbot_core/department_service.py (department analytics + admin queries)
+    - chatbot_core/suggestions.py and ui_suggestions_api.py (suggested follow-up questions)
+
+3) Repository structure (high level)
+- Root-level entry points / server:
+  - app.py (main Flask app)
+  - chatbot.py, academic_chatbot.py, department_chatbot.py (extra/legacy chatbot scripts or previous versions)
+  - student_chatbot.py (another chatbot variant)
+  - test_chatbots.py (tests)
+- Flask/DB modules:
+  - database/db.py (MySQL connection + migrations)
+  - database/init_db.py (create tables + seed sample data)
+- Chatbot modules:
+  - chatbot_core/app_factory.py (build chatbot router; caches models)
+  - chatbot_core/blueprint.py (Flask routes for /api/chat/*)
+  - chatbot_core/router.py (request routing to services)
+  - chatbot_core/intent_classifier.py (intent detection)
+  - chatbot_core/knowledge_loader.py (load knowledge JSON bundle)
+  - chatbot_core/knowledge_answerer.py (choose best answer)
+  - chatbot_core/context_memory.py (store last intent and context in session)
+  - chatbot_core/student_service.py (student data fetch)
+  - chatbot_core/department_service.py (department data fetch)
+  - chatbot_core/suggestions.py (role-based suggested questions)
+  - chatbot_core/ui_suggestions_api.py (API for UI suggestions)
+  - chatbot_core/templates/placeholder.txt (template placeholder; actual HTML is in /templates)
+- Frontend (Flask templates + static assets):
+  - /templates: login/register/dashboard pages and department management pages
+  - /static: css/js and uploads directory
+- Data:
+  - /knowledge: domain JSON files used by chatbot knowledge base (academics, attendance policy, placements, etc.)
+  - /data: campus_data.json (used by legacy chatbot.py shown), plus campus_data*.jsonl/csv/patch notes
+
+4) Database design & initialization
+A) database/db.py
+- Uses mysql-connector.
+- Loads environment variables from .env.local or .env (manual loader + python-dotenv if installed).
+- connect_db():
+  - Ensures migrations run before returning a connection.
+  - _run_migrations() adds missing columns to existing tables if they don’t exist:
+    - student_attendance_records: add semester_number and subject
+    - timetable_entries: add semester_number
+    - exam_schedule: add semester_number
+    - attendance_records: add semester_number
+
+B) database/init_db.py
+Creates and seeds MySQL tables.
+Key tables (as defined):
+- registration_requests
+  - pending signups waiting for approval
+  - fields: student_id (unique), name, password, gender, date_of_birth, email (unique), image_path, department, status, created_at
+- approved_students
+  - approved student accounts
+- attendance_records
+  - legacy subject-wise attendance: department, subject, attendance_percent
+- student_attendance_records
+  - manual, student-wise attendance:
+    - department, semester_number, subject, attendance_date, student_id, attendance_percent
+    - UNIQUE constraint on (department, semester_number, subject, attendance_date, student_id) style
+- timetable_entries
+  - department, day, subject (+ semester_number is expected by migration)
+- exam_schedule
+  - department, subject, exam_date (+ semester_number)
+- placements
+  - department, company, package, status
+- faculty, department_notices, student_sgpa_cgpa, faculty_subjects
+  - used by chatbot functionality (department chatbot, SGPA/CGPA, “who teaches X?”)
+- semesters
+- semester_subjects
+  - (department, semester_number, subject_name, subject_code)
+- student_results
+  - (student_id, department, semester_number, subject_name) with marks/max_marks
+
+C) Seed data
+- Seeds attendance_records (10 subjects × 5 departments).
+- Seeds timetable_entries (Monday–Friday schedule).
+- Seeds exam_schedule with future dates.
+- Seeds placements (10 entries per department).
+- Seeds semesters (1–4 shown in snippet).
+- Seeds semester_subjects per department/semester.
+
+5) Main Flask application (app.py)
+A) Startup
+- Creates Flask app
+- Uses secret_key = 'campus_secret_key'
+- Sets UPLOAD_FOLDER = static/uploads
+- Calls init_db() on startup.
+
+B) Authentication
+- Student login/registration:
+  - GET /register -> register.html
+  - POST /register
+    - inserts into registration_requests with status='pending'
+    - checks approved_students and registration_requests to avoid duplicate crash
+  - GET /login -> login.html
+  - POST /login
+    - verifies user against approved_students (student_id + password)
+    - sets session user fields:
+      - session['user'] = user[2] (name)
+      - session['student_id'] = user[1]
+      - session['department'] = "Computer Science" (note: hard-coded)
+
+- Department admin login:
+  - GET/POST /department-login
+    - admin credentials hard-coded: username='admin' password='admin123'
+  - session['admin'] = True
+
+C) Student pages
+- GET / -> index.html
+- GET /dashboard
+  - renders dashboard.html with user + student profile (from approved_students)
+- Academic pages (each checks session):
+  - /attendance?semester=...
+  - /timetable?semester=...
+  - /exam?semester=...
+  - /placement
+    - currently returns placements only for department='Computer Science'
+  - /student-chatbot
+  - /student-result?semester=...
+
+D) Department admin pages / CRUD routes
+These routes are protected by session['admin'].
+Major areas:
+- Registration approvals:
+  - /department-dashboard
+    - shows pending registration_requests + approved_students list (for UI)
+  - /department-approve/<id>
+  - /department-reject/<id>
+  - /department-delete-request/<id>
+
+- Attendance management:
+  - /department-attendance
+  - /department-attendance/create (POST)
+  - /department-attendance/edit/<record_id>
+  - /department-attendance/update/<record_id>
+  - /department-attendance/delete/<record_id>
+  - /department-promote-students (POST)
+    - copies subjects from from_semester to to_semester using INSERT IGNORE into semester_subjects
+
+- Timetable management:
+  - /department-timetable
+  - /department-timetable/create
+  - /department-timetable/edit/<record_id>
+  - /department-timetable/update/<record_id>
+  - /department-timetable/delete/<record_id>
+
+- Exam schedule management:
+  - /department-exam
+  - /department-exam/create
+  - /department-exam/edit/<record_id>
+  - /department-exam/update/<record_id>
+  - /department-exam/delete/<record_id>
+
+- Placements management:
+  - /department-placement
+  - /department-placement/create
+  - /department-placement/edit/<record_id>
+  - /department-placement/update/<record_id>
+  - /department-placement/delete/<record_id>
+
+- Subject management:
+  - /department-subjects
+  - /department-subjects/add
+  - /department-subjects/seed
+  - /department-subjects/delete/<subject_id>
+  - /department-subjects/edit/<subject_id>
+
+- Result management:
+  - /department-result
+  - /department-result/add-subject
+  - /department-result/edit-subject/<record_id>
+  - /department-result/update-subject/<record_id>
+  - /department-result/delete-subject/<record_id>
+  - /department-result/save-marks
+  - /department-result/edit-marks/<record_id>
+  - /department-result/update-marks/<record_id>
+
+6) Chatbot subsystem (AJAX JSON)
+A) Flask Blueprint endpoints (chatbot_core/blueprint.py)
+- bp = Blueprint("chatbot_core", __name__)
+- Registered in app.py:
+  - app.register_blueprint(chatbot_core_bp)
+
+Endpoints:
+1) POST /api/chat/general
+- body: { "message": "..." }
+- Uses router.handle_general(msg, session)
+- Adds role-based suggestions:
+  - role = 'department' if session.get('admin') else ('student' if session.get('student_id') else 'general')
+- Returns JSON:
+  - { "reply": <string>, "suggestions": [ ... ] }
+
+2) POST /api/chat/student
+- requires session['student_id'] else 401
+- determines department from session (currently uses session.get('department') or Computer Science)
+- Uses router.handle_student(msg, student_id, department, session)
+- Returns reply + student suggestions
+
+3) POST /api/chat/department
+- requires session['admin'] else 403
+- Uses router.handle_department(msg, department, session)
+- Returns reply + department suggestions
+
+B) Router dispatch (chatbot_core/router.py)
+- ChatbotRouter created by create_chatbot_router (in app_factory).
+- It combines:
+  - a classifier: chatbot_core/intent_classifier.py
+  - a knowledge bundle: chatbot_core/knowledge_loader.py
+
+Router responsibilities:
+- classify user message into an intent with confidence
+- optionally enforce confidence threshold CONF_MIN
+- dispatch to the correct “service” function:
+  - Student pipeline:
+    - full_information_query
+    - attendance_query and follow-ups
+    - exam_eligibility_query
+    - exam_query
+    - result/marks
+    - cgpa/sgpa
+    - semester_result_query
+    - backlog_query
+    - subjects_to_improve_query
+    - timetable_query (today/full/sample)
+    - subjects_query (registered)
+    - profile_query
+    - placement_query (status vs offered list)
+  - Department pipeline:
+    - analytics_query/overview
+    - attendance (below threshold, report)
+    - backlogs
+    - placements statistics
+    - semester analytics
+    - students by semester
+    - subject performance / failed subjects
+    - timetable (department overview or today schedule)
+
+- Context memory:
+  - Uses ChatContext from chatbot_core/context_memory.py
+  - Stores last_intent into session as ctx_last_intent
+  - For follow-ups: router checks ctx.last_intent and keywords to answer specialized questions.
+
+7) Legacy/auxiliary chatbot files in root
+- chatbot.py (shown partially):
+  - Contains TF-IDF based intent/FAQ retrieval over campus_data.json
+  - Detects category by keywords (fees/attendance/subjects/placement/exam/library/admission)
+  - Uses cosine similarity with thresholding
+  - Has fallback keyword overlap logic
+- academic_chatbot.py, department_chatbot.py, student_chatbot.py
+  - likely older non-blueprint implementations.
+
+8) Frontend assets
+- Templates cover:
+  - student UI: chatbot.html, student_chatbot.html, dashboard.html, attendance.html, timetable.html, exam.html, placement.html, student_result.html
+  - admin UI: department_dashboard.html, department_attendance.html, department_timetable.html, department_exam.html, department_placement.html, department_result.html, department_subjects.html and edit pages
+  - common: nav.html, header.html, footer.html
+
+- Static:
+  - static/style.css, static/dashboard.css
+  - static/script.js (client logic)
+  - static/uploads/* for profile images
+
+9) Expected runtime behavior (end-to-end)
+1) DB init runs on startup (init_db())
+2) Student:
+   - register -> pending request
+   - department admin approves request -> moves row to approved_students
+   - student login -> session is set
+   - student navigates to /dashboard or academic pages
+   - student uses /student-chatbot UI:
+     - client sends POST /api/chat/student {message}
+     - router queries student_service functions using session student_id and department
+
+3) Department admin:
+   - uses /department-dashboard and CRUD pages to manage academic data
+   - uses /department-chatbot UI:
+     - client sends POST /api/chat/department
+     - router queries department_service analytics functions
+
+10) Notable design observations / potential issues (based on code reviewed)
+- Department for student login is hard-coded in app.py to "Computer Science" during login.
+  - Elsewhere (like chatbot router and some student result/attendance code) expects department from DB student record.
+  - There may be a mismatch between real department and session department.
+- In app.py, placement endpoint currently selects placements for department='Computer Science'.
+- MySQL migrations are run on every connect_db() call (in db.py _run_migrations), which may be heavier in production.
+- There are multiple chatbot implementations (legacy TF-IDF in chatbot.py vs knowledge-based structured routing in chatbot_core/*).
+
+END OF INTRO.TXT
+
